@@ -1,7 +1,7 @@
 project: Dream Atlas
 state: setup-complete-awaiting-concept
 current_phase: discovery
-updated_at: 2026-02-18T23:45:00Z
+updated_at: 2026-02-18T23:47:00Z
 team:
   pm: planned
   product: planned
@@ -11,6 +11,7 @@ team:
   qa: planned
 guards:
   token_guard: active
+  token_guard_cron_job_id: 4ea7dde4-dfca-4b17-a25c-628e01e790db
   pause_thresholds:
     day_budget_left_percent: 20
     time_left_hours: 1
