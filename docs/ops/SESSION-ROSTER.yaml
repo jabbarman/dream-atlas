@@ -1,0 +1,22 @@
+project: Dream Atlas
+created_at: 2026-02-18T23:46:00Z
+purpose: Persistent role-session mapping for team continuity
+sessions:
+  pm:
+    label: dreamatlas-pm
+    session_key: agent:main:subagent:a826f399-d998-4a9e-b7e4-c1f2e761665c
+  product:
+    label: dreamatlas-product
+    session_key: agent:main:subagent:6b9562e6-2a96-4b66-afef-596406c5220d
+  design:
+    label: dreamatlas-design
+    session_key: agent:main:subagent:89852b88-8f58-4491-9786-7fe5da9c61e8
+  techlead:
+    label: dreamatlas-techlead
+    session_key: agent:main:subagent:70d710f9-d95b-48eb-bdac-65013e6a0054
+  dev:
+    label: dreamatlas-dev
+    session_key: agent:main:subagent:a4f88c33-9e15-47a6-89c7-5acd10b3ea94
+  qa:
+    label: dreamatlas-qa
+    session_key: agent:main:subagent:0b9d7877-0450-4426-9236-4ceff329a0ed
