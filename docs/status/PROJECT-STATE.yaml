@@ -1,0 +1,18 @@
+project: Dream Atlas
+state: setup-complete-awaiting-concept
+current_phase: discovery
+updated_at: 2026-02-18T23:45:00Z
+team:
+  pm: planned
+  product: planned
+  design: planned
+  techlead: planned
+  dev: planned
+  qa: planned
+guards:
+  token_guard: active
+  pause_thresholds:
+    day_budget_left_percent: 20
+    time_left_hours: 1
+    context_percent: 85
+next_step: "Receive concept brief from user and initialize Discovery artifacts."
