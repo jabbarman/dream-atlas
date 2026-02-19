@@ -27,7 +27,10 @@ Medium term: Position as:
 A creative tool
 Or a research/therapy-adjacent exploratory interface
 Or a platform concept for “personal knowledge worlds”
-3. Success Metrics (30 / 60 / 90 Days)
+3. Success Metrics (30 / 60 / 90 Capability Tiers)
+Clarification
+30/60/90 represent capability tiers (Foundation, Meaningful Use, Compelling Prototype), not fixed real-world day commitments.
+Delivery mode is agent-speed by default, with timeline determined by dependency/approval constraints rather than human-only throughput.
 30 Days (Foundation)
 Tech:
 User can input text fragments
@@ -82,8 +85,8 @@ Full psychotherapy tooling or clinical claims
 Complex AI interpretation of psychology/meaning (keep it light)
 5. Constraints (Time / Budget / Tech / Compliance)
 Time
-Likely a part-time / spare-time project
-Target: meaningful prototype in ~8–12 weeks
+Agent-speed delivery model with parallelized execution where possible
+Target: meaningful prototype as soon as milestone quality gates are met (not bound to part-time human-week estimates)
 Budget
 Ideally minimal
 Mostly dev time + hosting

@@ -1,5 +1,7 @@
 # Discovery — Success Metrics (30 / 60 / 90)
 
+> Clarification: In this project, 30/60/90 are capability tiers (Foundation/Meaningful Use/Compelling Prototype), not fixed real-world day commitments. Delivery runs in agent-speed mode and may complete faster than calendar-day framing.
+
 ## North-star direction
 Increase reflective/creative insight per exploration session.
 
@@ -8,7 +10,7 @@ Increase reflective/creative insight per exploration session.
 - Ethics: no clinical positioning in UX/copy
 - Privacy: user data ownership/private-by-default posture maintained
 
-## 30 days — Foundation
+## Tier 30 — Foundation
 ### Delivery outcomes
 - Text fragment input working
 - Procedural 2D atlas generated
@@ -19,7 +21,7 @@ Increase reflective/creative insight per exploration session.
 - Atlas generation time within agreed budget (set baseline target during spike)
 - Zero critical defects in core path
 
-## 60 days — Meaningful use
+## Tier 60 — Meaningful use
 ### Delivery outcomes
 - Basic clustering/grouping
 - Save/load multiple atlases
@@ -30,7 +32,7 @@ Increase reflective/creative insight per exploration session.
 - At least 3 distinct map patterns observed on real user data
 - Users report discovered connections they had not previously seen
 
-## 90 days — Compelling prototype
+## Tier 90 — Compelling prototype
 ### Delivery outcomes
 - Advanced procedural pass (terrain/biome/layer concept)
 - Import/export capabilities
