@@ -1,0 +1,136 @@
+Dream Atlas – A Procedural Memory Map.
+1. Problem + Target User
+Problem
+People capture fragments of dreams, memories, and ideas, but they remain:
+Linear (notes apps, journals)
+Hard to revisit spatially or relationally
+Lacking any sense of “emotional geography” or emergent structure
+Creative and reflective material is under-explored because it isn’t navigable or discoverable in an intuitive way.
+Target Users
+Primary:
+Creatives: writers, artists, game designers, filmmakers
+Reflective users: journalers, therapists-in-training, people into memory/dream logging
+Secondary:
+Researchers / educators exploring narrative, memory, or qualitative data
+Curious tech users interested in generative/procedural systems
+2. Value Proposition / Business Goal
+Value Proposition
+Turn abstract, emotional, and fragmentary text into a living, explorable atlas.
+Users don’t just store memories—they navigate them.
+Discover patterns, clusters, and constellations of meaning over time.
+A new medium between journaling, mind-mapping, and generative art.
+Business / Project Goal
+Short term: Build a compelling, differentiated interactive prototype that demonstrates:
+Procedural world-building from personal data
+Novel UX for memory/narrative exploration
+Medium term: Position as:
+A creative tool
+Or a research/therapy-adjacent exploratory interface
+Or a platform concept for “personal knowledge worlds”
+3. Success Metrics (30 / 60 / 90 Days)
+30 Days (Foundation)
+Tech:
+User can input text fragments
+System generates a navigable 2D atlas (nodes/regions)
+Basic procedural layout works
+UX:
+Pan/zoom/map navigation
+Click node → see memory
+Metrics:
+1–2 internal users can create and explore an atlas
+Atlas generation time < X seconds
+No critical crashes in basic flows
+60 Days (Meaningful Use)
+Tech:
+Clustering / grouping (themes, proximity, tags, embeddings)
+Save/load multiple atlases
+Visual differentiation (regions, constellations, landmarks)
+UX:
+Search or highlight related memories
+Basic filtering (time, theme, intensity, etc.)
+Metrics:
+Users spend >10 minutes per session exploring
+At least 3 distinct “map patterns” emerge from real data
+Users report discovering connections they hadn’t noticed
+90 Days (Compelling Prototype)
+Tech:
+More advanced procedural generation (terrain, biomes, or layered maps)
+Import/export data
+Optional AI-assisted clustering or labeling
+UX:
+“Guided tour” or “memory path” mode
+Shareable screenshots or map views
+Metrics:
+Repeat usage by test users
+Clear qualitative feedback: “this changes how I see my notes/memories”
+Demo-ready for showcasing or pitching
+4. Scope Boundaries (In / Out)
+In Scope (v1)
+Web app (React + canvas/WebGL/Phaser)
+Text input → procedural spatial layout
+2D map navigation (pan/zoom)
+Nodes = memories/fragments
+Basic clustering / grouping logic
+Local or simple backend storage
+Visual metaphors: nodes, regions, constellations
+Out of Scope (v1)
+Mobile native apps
+Real-time multi-user collaboration
+Heavy social features
+Full psychotherapy tooling or clinical claims
+3D worlds (tempting, but scope risk)
+Complex AI interpretation of psychology/meaning (keep it light)
+5. Constraints (Time / Budget / Tech / Compliance)
+Time
+Likely a part-time / spare-time project
+Target: meaningful prototype in ~8–12 weeks
+Budget
+Ideally minimal
+Mostly dev time + hosting
+Optional: small spend on AI APIs or embeddings
+Tech
+Frontend: React + Canvas/WebGL/Phaser/Three.js (pick one)
+Backend: Simple API (Node/Python) + DB (Postgres/SQLite/Neo4j optional)
+Data: Start simple (text + metadata), grow later
+Compliance / Ethics
+User data is personal and sensitive
+Need:
+Clear data ownership
+Local-first or private-by-default storage
+No implicit “mental health” claims
+Avoid positioning as therapy or diagnosis tool
+6. Top Assumptions / Risks
+Assumptions
+Users will find spatial metaphors more insightful than lists
+Procedural layouts can feel meaningful, not arbitrary
+Visual exploration will trigger reflection and discovery
+You can get “good enough” structure without heavy AI
+Risks
+UX risk: Map feels pretty but meaningless
+Complexity risk: Procedural generation becomes a time sink
+Scope creep: Temptation to add 3D, social, heavy AI too early
+Emotional risk: Users may project therapeutic value onto a non-clinical tool
+Data modeling risk: Hard to evolve schema once people have real data
+Mitigations
+Start with very simple, legible rules
+Test early with real text
+Keep metaphors consistent and explainable
+Be explicit about the exploratory/creative nature of the tool
+7. Key Stakeholders + Decision Owner
+Stakeholders
+Me (product vision, domain framing, final direction)
+Agentic dev team:
+Frontend/procedural systems
+Backend/data modeling
+UX/interaction design
+Test users:
+Creatives / writers / reflective users
+Possibly educators or researchers later
+Decision Owner
+Me = Product Owner / Creative Director
+Final say on:
+Scope cuts
+Metaphor and tone
+What “good enough” means for v1
+Whether it’s a tool, artwork, platform, or research prototype
+

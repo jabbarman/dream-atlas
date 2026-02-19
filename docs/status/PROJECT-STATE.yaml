@@ -1,14 +1,14 @@
 project: Dream Atlas
-state: setup-complete-awaiting-concept
+state: discovery-initialized
 current_phase: discovery
-updated_at: 2026-02-18T23:47:00Z
+updated_at: 2026-02-19T00:16:00Z
 team:
-  pm: planned
-  product: planned
-  design: planned
-  techlead: planned
-  dev: planned
-  qa: planned
+  pm: ready
+  product: ready
+  design: ready
+  techlead: ready
+  dev: ready
+  qa: ready
 guards:
   token_guard: active
   token_guard_cron_job_id: 4ea7dde4-dfca-4b17-a25c-628e01e790db
@@ -16,4 +16,22 @@ guards:
     day_budget_left_percent: 20
     time_left_hours: 1
     context_percent: 85
-next_step: "Receive concept brief from user and initialize Discovery artifacts."
+reporting:
+  whatsapp_enabled: true
+  whatsapp_target: "+447958653883"
+  milestone_report_cron_job_id: 9387c994-a345-4c31-9009-488143e5319a
+milestones:
+  discovery_gate:
+    status: pending
+    event_id: milestone-discovery-gate-v1
+  poc_gate:
+    status: pending
+    event_id: milestone-poc-gate-v1
+  mvp_ready:
+    status: pending
+    event_id: milestone-mvp-ready-v1
+  launch_ready:
+    status: pending
+    event_id: milestone-launch-ready-v1
+resolved_major_problems: []
+next_step: "Produce Discovery pack: problem framing, JTBD, outcome metrics, initial risk register, and prioritized opportunity backlog."
