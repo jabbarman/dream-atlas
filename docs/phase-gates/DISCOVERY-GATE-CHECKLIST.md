@@ -7,11 +7,11 @@
 - [x] Scope boundaries explicit (in/out)
 - [x] Initial opportunity backlog prioritized
 - [x] Initial risk register created with owners and review dates
-- [ ] Stakeholder review complete (Product Owner sign-off pending)
-- [ ] Discovery gate decision recorded (Pass/Loop)
+- [x] Stakeholder review complete (Product Owner sign-off complete)
+- [x] Discovery gate decision recorded (Pass/Loop)
 
 ## Current gate status
-**Pending sign-off**
+**Pass — accepted by Product Owner (2026-02-19)**
 
 ## Required to pass
 - Product Owner review and acceptance of Discovery pack v1
