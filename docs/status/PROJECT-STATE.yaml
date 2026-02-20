@@ -51,16 +51,17 @@ milestones:
     event_id: milestone-launch-ready-v1
 resolved_major_problems: []
 permission_blockers: []
-pause_reason: 'Token guard threshold breached at 20:30 Europe/London: day budget left is 9% (<20%) and 5h-window time left is 54m (<1h). Work paused at a safe checkpoint.'
+pause_reason: null
 resume_context:
   resume_mode: generic
-  status: armed
+  status: resumed
   paused_at: '2026-02-20T20:30:00Z'
   resume_when: token-guard-healthy
   resume_dispatch_target: agent:main:main
   task_summary: Continue Dream Atlas from latest safe checkpoint in current phase.
   next_action: Begin implementation kickoff against docs/02-poc/08-TECH-BLUEPRINT.md and docs/02-poc/10-IMPLEMENTATION-CHECKLIST.md, then run QA loop using docs/02-poc/12-QA-TEST-MATRIX.md.
   dispatch_message: Dream Atlas auto-resume trigger: token guard is now healthy. Resume work from the latest safe checkpoint using docs/status/PROJECT-STATE.yaml and project docs. Continue the current phase and execute the next queued task generically (do not assume a hardcoded task).
-  last_resume_check_at: '2026-02-20T20:40:00Z'
-next_resume_step: When allowance refreshes and token guard is healthy, auto-resume using resume_context and continue the next queued task for the current phase.
-next_step: Paused by token guard; await healthy thresholds, then auto-resume next queued POC task from state/docs.
+  last_resume_check_at: '2026-02-20T20:48:00Z'
+  resumed_at: '2026-02-20T20:48:00Z'
+next_resume_step: If paused again by token guard, auto-resume using resume_context when healthy.
+next_step: Begin implementation kickoff against docs/02-poc/08-TECH-BLUEPRINT.md and docs/02-poc/10-IMPLEMENTATION-CHECKLIST.md, then run QA loop using docs/02-poc/12-QA-TEST-MATRIX.md.
