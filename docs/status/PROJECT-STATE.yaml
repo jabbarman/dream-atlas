@@ -1,8 +1,8 @@
 project: Dream Atlas
-state: poc-paused-token-guard
+state: poc-active
 current_phase: poc
-execution_state: paused-token-guard
-updated_at: '2026-02-20T20:45:15Z'
+execution_state: active
+updated_at: '2026-02-20T20:48:00Z'
 last_progress_event_at: '2026-02-20T18:01:13Z'
 progress_events_today: 9
 team:
