@@ -22,9 +22,9 @@ Action: tighten scope for current iteration and prepare pause candidate.
 
 Action: **do not start new work**. Complete only safe-stop tasks:
 1. Update `docs/status/PROJECT-STATE.yaml`
-2. Write explicit resume instructions
+2. Write `resume_context` (generic, task-agnostic) with `status: armed`, `resume_when`, `next_action`, and `dispatch_message`
 3. Send WhatsApp alert
-4. Wait for user instruction
+4. Wait for token guard recovery (auto-resume controller can resume without manual task-specific trigger)
 
 ## WhatsApp alert format
 "Dream Atlas paused at safe checkpoint. Reason: <threshold hit>. Last completed: <item>. Next resume step: <step>."

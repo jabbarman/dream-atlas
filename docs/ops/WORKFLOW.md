@@ -34,6 +34,11 @@
 - Feasibility accepted by PM + Tech + QA
 - MVP estimate confidence acceptable
 
+## Pause/Resume Guardrail (cross-phase)
+- Pause is state-driven (`execution_state: paused-token-guard`) and must capture a task-agnostic `resume_context` in `docs/status/PROJECT-STATE.yaml`.
+- Resume is state-driven (not task-name driven): when guard thresholds recover, controller flips state back to active and dispatches `resume_context.dispatch_message`.
+- The resumed work item should be derived from current project state/docs (`next_action`), so this works for any phase/task.
+
 ## Phase 3: MVP
 ### Objectives
 - Build smallest valuable release

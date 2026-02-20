@@ -14,3 +14,6 @@ Status: Completed and accepted by Product Owner (2026-02-19).
 - `docs/01-discovery/03-SUCCESS-METRICS-30-60-90.md`
 - `docs/01-discovery/CONCEPT-INTAKE.md`
 
+## 2026-02-20 — Auto-resume (generic token-guard controller)
+- 2026-02-20T07:43:00Z: Token guard recovered (day budget, 5h window, and context all healthy). Project state auto-resumed to `active` and execution will continue from the latest checkpoint using the queued next task.
+
