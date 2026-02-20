@@ -1,0 +1,18 @@
+{
+  "name": "dream-atlas",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "services/*"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace @dream-atlas/web run dev",
+    "dev:api": "npm --workspace @dream-atlas/api run dev",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "build:web": "npm --workspace @dream-atlas/web run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

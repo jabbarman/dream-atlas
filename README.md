@@ -16,3 +16,19 @@ Start here:
 3. `docs/ops/WORKFLOW.md`
 4. `docs/ops/TOKEN-GUARD.md`
 5. `docs/status/PROJECT-STATE.yaml`
+
+## Product scaffold (POC codebase)
+
+A runnable scaffold is now in place:
+- `apps/web` → React + PixiJS frontend
+- `services/api` → Node/Express API
+
+Quick start:
+
+```bash
+npm install
+npm run dev
+```
+
+- Web: http://localhost:5173
+- API: http://localhost:8787/health
