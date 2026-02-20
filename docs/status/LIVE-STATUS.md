@@ -1,11 +1,11 @@
 # Dream Atlas Live Status
 
-- last_updated_utc: 2026-02-20T18:01:13Z
+- last_updated_utc: 2026-02-20T18:15:11Z
 - execution_state: paused-token-guard
 - current_phase: poc
 - state_label: poc-paused-token-guard
-- work_signal: strong
-- work_signal_reason: Latest commit touches files outside docs/status/*.
+- work_signal: weak
+- work_signal_reason: Latest commit is docs/status/* only; non-status commit exists within last 24h.
 - last_real_work_event_at: 2026-02-20T08:05:15Z
 - last_real_work_event_ref: 98f2be865fc34d403526a63f1751b292129146c5
 - real_work_events_today: 4
