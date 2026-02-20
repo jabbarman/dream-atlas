@@ -28,11 +28,13 @@ observability:
   live_status_file: docs/status/LIVE-STATUS.md
   live_status_cron_job_id: 00df536d-9a90-495a-bcfd-dce857b6b2de
   work_signal: weak
-  work_signal_reason: Latest commit touched docs/status only; latest non-status commit
-    is within last 24h.
-  last_real_work_event_at: '2026-02-19T08:15:02Z'
+  work_signal_reason: Latest commit is docs/status/* only; non-status commit exists
+    within last 24h.
+  last_real_work_event_at: '2026-02-19T08:15:02+00:00'
   last_real_work_event_ref: 6b141fd8783192adc78d7d6abda11069846a0120
   real_work_events_today: 0
+  updated_at: '2026-02-20T00:15:23Z'
+  implementation_artifacts_count: 0
 milestones:
   discovery_gate:
     status: passed
