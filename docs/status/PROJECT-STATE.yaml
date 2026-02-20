@@ -2,7 +2,7 @@ project: Dream Atlas
 state: poc-paused-token-guard
 current_phase: poc
 execution_state: paused-token-guard
-updated_at: '2026-02-20T18:15:11Z'
+updated_at: '2026-02-20T18:32:12Z'
 last_progress_event_at: '2026-02-20T18:01:13Z'
 progress_events_today: 9
 team:
@@ -33,7 +33,7 @@ observability:
   last_real_work_event_at: '2026-02-20T08:05:15Z'
   last_real_work_event_ref: 98f2be865fc34d403526a63f1751b292129146c5
   real_work_events_today: 4
-  updated_at: '2026-02-20T18:15:11Z'
+  updated_at: '2026-02-20T18:32:12Z'
   implementation_artifacts_count: 0
 milestones:
   discovery_gate:
@@ -50,8 +50,8 @@ milestones:
     event_id: milestone-launch-ready-v1
 resolved_major_problems: []
 permission_blockers: []
-pause_reason: 'Token guard threshold breached at 18:00 Europe/London: day budget left
-  is 17% (<20%). Work paused at a safe checkpoint.'
+pause_reason: 'Token guard threshold still breached at 18:30 Europe/London: day budget
+  left is 15% (<20%). Work remains paused at a safe checkpoint.'
 resume_context:
   resume_mode: generic
   status: armed
@@ -65,7 +65,7 @@ resume_context:
     Resume work from the latest safe checkpoint using docs/status/PROJECT-STATE.yaml
     and project docs. Continue the current phase and execute the next queued task
     generically (do not assume a hardcoded task).'
-  last_resume_check_at: '2026-02-20T18:20:00Z'
+  last_resume_check_at: '2026-02-20T18:30:25Z'
 next_resume_step: When allowance refreshes and token guard is healthy, auto-resume
   using resume_context and continue the next queued task for the current phase.
 next_step: Paused by token guard; await healthy thresholds, then auto-resume next
