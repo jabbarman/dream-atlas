@@ -1,6 +1,6 @@
 # Dream Atlas Live Status
 
-- last_updated_utc: 2026-02-20T20:32:37Z
+- last_updated_utc: 2026-02-20T20:45:15Z
 - execution_state: paused-token-guard
 - current_phase: poc
 - state_label: poc-paused-token-guard
@@ -9,5 +9,5 @@
 - last_real_work_event_at: 2026-02-20T08:05:15+00:00
 - last_real_work_event_ref: 98f2be865fc34d403526a63f1751b292129146c5
 - real_work_events_today: 4
-- team_readiness: 6/6 ready
+- team_readiness summary: 6/6 ready (pm, product, design, techlead, dev, qa)
 - next_step: Paused by token guard; await healthy thresholds, then auto-resume next queued POC task from state/docs.
