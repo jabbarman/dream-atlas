@@ -1,10 +1,10 @@
 project: Dream Atlas
-state: poc-paused-token-guard
+state: poc-active
 current_phase: poc
-execution_state: paused-token-guard
-updated_at: '2026-02-20T02:45:43Z'
-last_progress_event_at: '2026-02-19T22:15:04Z'
-progress_events_today: 6
+execution_state: active
+updated_at: '2026-02-20T07:44:35Z'
+last_progress_event_at: '2026-02-20T07:44:35Z'
+progress_events_today: 7
 team:
   pm: ready
   product: ready
@@ -27,14 +27,13 @@ reporting:
 observability:
   live_status_file: docs/status/LIVE-STATUS.md
   live_status_cron_job_id: 00df536d-9a90-495a-bcfd-dce857b6b2de
-  work_signal: weak
-  work_signal_reason: Latest commit is docs/status/* only; non-status commit exists
-    within last 24h.
-  last_real_work_event_at: '2026-02-19T08:15:02+00:00'
-  last_real_work_event_ref: 6b141fd8783192adc78d7d6abda11069846a0120
-  real_work_events_today: 0
-  updated_at: '2026-02-20T02:45:43Z'
-  implementation_artifacts_count: 0
+  work_signal: active
+  work_signal_reason: New POC implementation-planning artifact added under docs/02-poc.
+  last_real_work_event_at: '2026-02-20T07:44:35Z'
+  last_real_work_event_ref: pending-commit
+  real_work_events_today: 1
+  updated_at: '2026-02-20T07:44:35Z'
+  implementation_artifacts_count: 1
 milestones:
   discovery_gate:
     status: passed
@@ -50,8 +49,17 @@ milestones:
     event_id: milestone-launch-ready-v1
 resolved_major_problems: []
 permission_blockers: []
-pause_reason: 'Token guard threshold still breached at 00:30 Europe/London: 5h-window
-  time left is 29m (<1h). Project remains paused at a safe checkpoint.'
-next_resume_step: 'When allowance refreshes and token guard is healthy, resume with
-  POC Spike #1 planning (architecture options shortlist + feasibility criteria).'
-next_step: 'Paused by token guard; resume POC Spike #1 planning once threshold clears.'
+pause_reason: null
+resume_context:
+  resume_mode: generic
+  status: resumed
+  paused_at: '2026-02-20T02:45:43Z'
+  resume_when: token-guard-healthy
+  resume_dispatch_target: agent:main:main
+  task_summary: 'Continue Dream Atlas from latest safe checkpoint in current phase.'
+  next_action: 'Run the next queued task from project docs/state (not hardcoded by task name).'
+  dispatch_message: 'Dream Atlas auto-resume trigger: token guard is now healthy. Resume work from the latest safe checkpoint using docs/status/PROJECT-STATE.yaml and project docs. Continue the current phase and execute the next queued task generically (do not assume a hardcoded task).'
+  last_resume_check_at: '2026-02-20T07:43:00Z'
+  resumed_at: '2026-02-20T07:43:00Z'
+next_resume_step: 'When allowance refreshes and token guard is healthy, auto-resume using resume_context and continue the next queued task for the current phase.'
+next_step: 'Execute Batch 1 role deliverables from docs/02-poc/02-SPIKE-1-WORK-ASSIGNMENT.md, then begin implementation kickoff and QA loop.'
