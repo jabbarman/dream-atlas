@@ -1,6 +1,6 @@
-# Dream Atlas — Live Status
+# Dream Atlas Live Status
 
-- last_updated_utc: 2026-02-20T01:00:58Z
+- last_updated_utc: 2026-02-20T01:15:39Z
 - execution_state: paused-token-guard
 - current_phase: poc
 - state_label: poc-paused-token-guard
