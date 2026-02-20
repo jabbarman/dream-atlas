@@ -65,7 +65,7 @@ resume_context:
     Resume work from the latest safe checkpoint using docs/status/PROJECT-STATE.yaml
     and project docs. Continue the current phase and execute the next queued task
     generically (do not assume a hardcoded task).'
-  last_resume_check_at: '2026-02-20T18:30:25Z'
+  last_resume_check_at: '2026-02-20T18:32:39Z'
 next_resume_step: When allowance refreshes and token guard is healthy, auto-resume
   using resume_context and continue the next queued task for the current phase.
 next_step: Paused by token guard; await healthy thresholds, then auto-resume next
