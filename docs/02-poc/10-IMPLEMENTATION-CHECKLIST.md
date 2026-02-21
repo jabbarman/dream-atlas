@@ -1,7 +1,7 @@
 # Implementation Checklist (Dev)
 
 Owner: Dev  
-Status: In progress (Kickoff batch)
+Status: In progress (First end-to-end slice implemented)
 
 ## Phase A — Foundation (must-have)
 
@@ -11,40 +11,40 @@ Status: In progress (Kickoff batch)
 - [ ] Add `.env.example` and basic run scripts
 
 ### A2. Ingest + model
-- [ ] Implement fragment schema validation
-- [ ] Add normalization helpers
-- [ ] Load sample set from `docs/02-poc/data/FRAGMENT-SAMPLE-SPEC.md`
+- [x] Implement fragment schema validation
+- [x] Add normalization helpers
+- [x] Load sample set from `docs/02-poc/data/FRAGMENT-SAMPLE-SPEC.md`
 
 ### A3. Deterministic generation
-- [ ] Implement cluster mode: `theme`
-- [ ] Implement cluster mode: `intensity`
-- [ ] Add seeded RNG utility
-- [ ] Implement seeded layout with stable output checks
+- [x] Implement cluster mode: `theme`
+- [x] Implement cluster mode: `intensity`
+- [x] Add seeded RNG utility
+- [x] Implement seeded layout with stable output checks
 
 ### A4. Rendering + interaction
-- [ ] Render nodes and cluster regions
-- [ ] Add pan/zoom camera controls
-- [ ] Add node select/deselect with info panel
-- [ ] Add cluster mode toggle
+- [x] Render nodes and cluster regions
+- [x] Add pan/zoom camera controls
+- [x] Add node select/deselect with info panel
+- [x] Add cluster mode toggle
 
 ## Phase B — Persistence + observability
 
 ### B1. Persistence
-- [ ] Implement `POST /atlas/generate`
-- [ ] Implement `POST /atlas/:id/save`
-- [ ] Implement `POST /atlas/:id/load`
+- [x] Implement `POST /atlas/generate`
+- [x] Implement `POST /atlas/:id/save`
+- [x] Implement `POST /atlas/:id/load`
 - [ ] Ensure snapshot restores UI context
 
 ### B2. Performance hooks
-- [ ] Add generation timing instrumentation
-- [ ] Add simple debug view/log for latency snapshots
-- [ ] Validate generation <= 1500ms target at 50 fragments (dev baseline)
+- [x] Add generation timing instrumentation
+- [x] Add simple debug view/log for latency snapshots
+- [x] Validate generation <= 1500ms target at 50 fragments (dev baseline)
 
 ## Phase C — Hardening for spike review
 
-- [ ] Determinism check: same seed + same input => stable layout structure
-- [ ] Error handling for empty/invalid input
-- [ ] Basic smoke pass against QA matrix
+- [x] Determinism check: same seed + same input => stable layout structure
+- [x] Error handling for empty/invalid input
+- [x] Basic smoke pass against QA matrix (QA-01/QA-02/QA-07)
 - [ ] Capture demo artifact (gif/video)
 
 ## Immediate execution order (next 60 min)
