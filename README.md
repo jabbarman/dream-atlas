@@ -13,7 +13,8 @@ Start here:
 1. `docs/ops/TEAM-CHARTER.md`
 2. `docs/ops/AGENT-TOPOLOGY.md`
 3. `docs/ops/WORKFLOW.md`
-4. `docs/status/PROJECT-STATE.yaml`
+4. `docs/ops/CODEX-CLI-WORKFLOW.md`
+5. `docs/status/PROJECT-STATE.yaml`
 
 ## Product scaffold (POC codebase)
 
