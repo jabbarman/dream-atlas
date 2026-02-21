@@ -5,7 +5,6 @@ Phase: POC
 Source inputs:
 - `docs/status/PROJECT-STATE.yaml`
 - `docs/02-poc/01-SPIKE-1-ARCHITECTURE-AND-FEASIBILITY.md`
-- `docs/ops/SESSION-ROSTER.yaml`
 
 ## Objective for this batch
 Execute the next queued task for current phase by assigning Spike #1 implementation work across all team roles with concrete deliverables and handoff dependencies.

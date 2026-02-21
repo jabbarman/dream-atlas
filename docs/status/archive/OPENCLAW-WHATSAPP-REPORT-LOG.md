@@ -1,3 +1,11 @@
+# Archived OpenClaw WhatsApp Report Log
+
+Archived on 2026-02-21 after retiring OpenClaw-specific WhatsApp reporting flows.
+
+Original file: `docs/status/REPORT-LOG.md`
+
+---
+
 # Dream Atlas WhatsApp Report Log
 
 ## 2026-02-19 — Final review checklist (agent-speed rebaseline)
