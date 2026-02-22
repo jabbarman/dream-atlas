@@ -115,6 +115,16 @@ export default function App() {
     };
   }
 
+  function handleSelectNode(nodeId) {
+    setSelectedNodeId(nodeId);
+    setStatusMessage(`Selected node: ${nodeId}`);
+  }
+
+  function clearSelection() {
+    setSelectedNodeId(null);
+    setStatusMessage("Selection cleared.");
+  }
+
   function applyCameraState(uiState, fallbackAtlas) {
     const world = worldRef.current;
     if (!world) return;
@@ -316,7 +326,7 @@ export default function App() {
       });
       app.stage.on("pointertap", (event) => {
         if (event.target === app.stage) {
-          setSelectedNodeId(null);
+          clearSelection();
         }
       });
 
@@ -410,13 +420,36 @@ export default function App() {
       nodeGraphic.eventMode = "static";
       nodeGraphic.cursor = "pointer";
       nodeGraphic.on("pointertap", () => {
-        setSelectedNodeId(node.id);
+        handleSelectNode(node.id);
       });
 
       const cluster = clusterById.get(node.clusterId);
       nodeGraphic.label = `${node.id} | ${cluster?.label ?? "unknown"}`;
       world.addChild(nodeGraphic);
     });
+  }, [atlas, selectedNodeId]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+
+    window.__dreamAtlasDebug = {
+      getAtlas: () => atlas,
+      getSelectedNodeId: () => selectedNodeId,
+      getCameraState,
+      selectNodeById: (nodeId) => {
+        if (!atlas?.nodes?.some((node) => node.id === nodeId)) return false;
+        handleSelectNode(nodeId);
+        return true;
+      },
+      clearSelection: () => {
+        clearSelection();
+        return true;
+      },
+    };
+
+    return () => {
+      delete window.__dreamAtlasDebug;
+    };
   }, [atlas, selectedNodeId]);
 
   return (
@@ -479,6 +512,14 @@ export default function App() {
           disabled={!atlas}
         >
           Fit View
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={clearSelection}
+          disabled={!selectedNodeId}
+        >
+          Clear Selection
         </button>
       </section>
 
