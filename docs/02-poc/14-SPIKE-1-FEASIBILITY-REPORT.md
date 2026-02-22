@@ -13,6 +13,7 @@ Implemented in this spike:
 - Deterministic atlas generation with `theme` and `intensity` cluster modes
 - Interactive Pixi map with pan/zoom/select
 - Save/load snapshot API and UI controls with UI context restoration
+- High-resolution API perf instrumentation (`performance.now`) with generation phase and request/save/load timing fields
 - QA matrix execution with 10/10 scenarios recorded as PASS
 - Evidence artifacts captured in `docs/02-poc/evidence/`
 
@@ -27,14 +28,13 @@ Implemented in this spike:
 
 ## Bottlenecks and limitations
 
-1. API timing precision is low (`Date.now()`), causing coarse `generationMs` values on fast runs.
-2. Stress evidence is currently synthetic/manual; no automated FPS telemetry yet.
-3. Demo artifact is screenshot-based; no motion capture (GIF/video) yet for richer gate review.
+1. Stress evidence is currently synthetic/manual; no automated FPS telemetry yet.
+2. POC gate packet is complete, but explicit PM + Tech Lead + QA approvals are still pending in the sign-off record.
 
 ## Risk posture
 
 - Product risk: Moderate (meaningfulness still heuristic-based, but explainable)
-- Technical risk: Low-to-moderate (core flows stable; telemetry precision and richer perf observability pending)
+- Technical risk: Low (core flows stable; timing precision delivered, with automated FPS telemetry still backlog)
 - Delivery risk: Low for immediate POC continuation
 
 ## Recommendation
@@ -42,10 +42,10 @@ Implemented in this spike:
 Decision: **GO (conditional)** for continued POC progression and MVP-prep planning.
 
 Conditions to close before formal POC gate sign-off:
-1. Add high-resolution perf instrumentation in API timing.
-2. Record PM + Tech Lead + QA explicit sign-off note against this report.
+1. Record PM + Tech Lead + QA explicit sign-off note against this report.
 
 ## Proposed next execution slice
 
-1. Implement precise timing instrumentation (`performance.now`/perf hooks) in API response metrics.
+1. Validate high-resolution API perf fields (`generationMs`, phase timings, `requestMs`, `saveMs`, `loadMs`) in sign-off walkthrough.
 2. Run sign-off review and complete `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`.
+3. Carry automated FPS telemetry as MVP-prep observability backlog item.

@@ -54,3 +54,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: browser-driven flow capture (mode switch, save/load, selection) and artifact build using ImageMagick (`convert`).
 - Outcome: demo requirement is satisfied; only explicit PM/Tech Lead/QA approvals remain for formal gate closure.
+
+### Stage: High-resolution API timing instrumentation
+- Date (UTC): 2026-02-22T21:31:44Z
+- Integrator role: upgraded API timing from coarse timestamp diffs to `performance.now()` and added granular `perf` metrics (`phases`, `requestMs`, `saveMs`, `loadMs`) for faster-run observability.
+- Delegated agent role: none (single-session implementation).
+- Validation: API smoke check for generate/save/load responses confirming `timingSource`, phase timings, and roundtrip timing fields.
+- Outcome: timing-precision gap is closed for POC; remaining gate dependency is explicit PM/Tech Lead/QA sign-off.

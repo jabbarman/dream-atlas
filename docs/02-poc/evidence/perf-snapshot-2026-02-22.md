@@ -24,4 +24,4 @@ Environment:
 ## Caveats
 
 - One `max` outlier in 50/theme indicates startup/jitter effects; p95 remains low.
-- API payload field `perf.generationMs` currently uses low-resolution timing and should be upgraded before MVP.
+- This snapshot was captured before high-resolution timing landed; API payloads now report `timingSource: "performance.now"` with phase timings and request/save/load metrics (commit `9c9a704`).
