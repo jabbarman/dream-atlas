@@ -17,7 +17,7 @@ This project is a creative and exploratory tool. It is not a clinical or diagnos
 - Deterministic output for same seed + same input.
 - Cluster modes: `theme` and `intensity`.
 - PixiJS map rendering with pan/zoom/select interaction.
-- API endpoints for generate, save, and load snapshots.
+- API + UI snapshot persistence flow with saved-atlas picker, generate/save/load, and telemetry export.
 
 ## Architecture (current)
 
@@ -40,8 +40,9 @@ npm run dev
 
 ## API (POC)
 
+- `GET /atlas` - list stored atlas snapshots (supports `limit` and `offset`)
 - `POST /atlas/generate` - generate deterministic snapshot from fragment payload
-- `GET /atlas/:id` - retrieve generated snapshot from in-memory store
+- `GET /atlas/:id` - retrieve a stored snapshot by id
 - `POST /atlas/:id/save` - save snapshot
 - `POST /atlas/:id/load` - load snapshot
 
@@ -56,3 +57,4 @@ For implementation status and project governance:
 5. `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`
 6. `docs/03-mvp/01-MVP-SCOPE.md`
 7. `docs/03-mvp/02-MVP-IMPLEMENTATION-PLAN.md`
+8. `docs/03-mvp/05-SLICE-1-QA-REPORT.md`

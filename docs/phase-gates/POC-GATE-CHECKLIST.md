@@ -7,14 +7,14 @@
 - [x] Performance evidence captured against POC budgets.
 - [x] Demo artifact captured.
 - [x] Sign-off walkthrough executed with fresh telemetry exports.
-- [ ] PM approval recorded.
-- [ ] Tech Lead approval recorded.
-- [ ] QA approval recorded.
-- [ ] Final gate decision recorded (Pass/Loop).
+- [x] PM approval recorded.
+- [x] Tech Lead approval recorded.
+- [x] QA approval recorded.
+- [x] Final gate decision recorded (Pass/Loop).
 
 ## Current gate status
 
-Pending approvals — walkthrough/evidence packet complete as of 2026-02-22.
+Pass — gate approved on 2026-02-22.
 
 ## Evidence packet
 

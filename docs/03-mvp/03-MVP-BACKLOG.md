@@ -4,6 +4,17 @@ Date (UTC): 2026-02-22
 Phase: MVP-prep  
 Source: Discovery opportunities + completed POC evidence
 
+## Execution update (2026-02-22)
+
+- Completed:
+  - MVP-01 (API durability via SQLite storage)
+  - MVP-02 (Atlas listing API endpoint + frontend picker integration)
+  - MVP-03 (Snapshot `schemaVersion` support + versioning notes)
+  - MVP Slice 1 QA evidence pass (`docs/03-mvp/05-SLICE-1-QA-REPORT.md`)
+- Next in sequence:
+  - MVP-04 (Manual fragment entry form)
+  - MVP-05 (JSON paste/import flow)
+
 | ID | Item | Priority | Owner | Depends on | Done when |
 |---|---|---|---|---|---|
 | MVP-01 | Durable snapshot store (SQLite) | P0 | Dev | None | Save/load survives API restart |

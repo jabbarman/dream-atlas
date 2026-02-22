@@ -40,7 +40,7 @@ Run the final walkthrough packet and capture fresh evidence for PM/Tech Lead/QA 
 ## Notes and constraints
 
 - During walkthrough startup, `npm run dev` reported API `EADDRINUSE` on `:8787` because another API process was already active. Walkthrough proceeded against the running API instance, validated healthy via `/health`.
-- Sign-off approvals are still pending explicit PM/Tech Lead/QA entries in `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`.
+- Sign-off approvals were later confirmed and recorded in `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md` on 2026-02-22.
 
 ## Evidence links
 

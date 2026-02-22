@@ -2,7 +2,7 @@
 
 Phase: POC  
 Owner: PM  
-Status: Executed; formal sign-off pending
+Status: Executed; sign-off approved (2026-02-22)
 
 ## Required proofs
 - [x] 20–100 sample fragments can generate a stable 2D layout.
@@ -16,7 +16,7 @@ Status: Executed; formal sign-off pending
 - [x] Deterministic seed behavior validated (same seed => same layout).
 - [x] QA matrix executed for happy path + edge cases.
 - [x] Demo capture available (video/gif). (`docs/02-poc/evidence/poc-demo-flow.gif`)
-- [ ] PM + Tech Lead + QA sign-off recorded.
+- [x] PM + Tech Lead + QA sign-off recorded.
 
 ## Evidence artifacts
 - Demo: `docs/02-poc/evidence/` (GIF + screenshot available)

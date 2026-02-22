@@ -1,0 +1,13 @@
+{
+  "capturedAt": "2026-02-22T22:18:32.087Z",
+  "checks": {
+    "schemaVersionOnGenerate": 1,
+    "timingSource": "performance.now",
+    "listCountAfterGenerate": 1,
+    "saveSchemaVersion": 1,
+    "loadSchemaVersion": 1,
+    "loadMsType": "number",
+    "listCountAfterRestart": 1,
+    "persistedIdMatches": true
+  }
+}

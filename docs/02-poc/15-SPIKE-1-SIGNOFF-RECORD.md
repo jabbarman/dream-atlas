@@ -2,7 +2,7 @@
 
 Date opened (UTC): 2026-02-22T21:11:53Z  
 Phase: POC  
-Status: Walkthrough completed; awaiting role approvals
+Status: Approved (POC gate pass)
 
 ## Packet references
 
@@ -26,25 +26,25 @@ Status: Walkthrough completed; awaiting role approvals
 ## Approval entries
 
 ### PM sign-off
-- Decision: Pending
-- Name:
-- Date (UTC):
-- Notes: Walkthrough packet complete; review `docs/02-poc/16-SIGNOFF-WALKTHROUGH-2026-02-22.md` and telemetry exports.
+- Decision: Approved
+- Name: Confirmed by Product Owner (via session)
+- Date (UTC): 2026-02-22T22:12:25Z
+- Notes: Walkthrough packet accepted.
 
 ### Tech Lead sign-off
-- Decision: Pending
-- Name:
-- Date (UTC):
-- Notes: Validate perf payload and telemetry export evidence against budgets and feasibility report.
+- Decision: Approved
+- Name: Confirmed by Tech Lead (via session)
+- Date (UTC): 2026-02-22T22:12:25Z
+- Notes: Feasibility, perf evidence, and telemetry packet accepted.
 
 ### QA sign-off
-- Decision: Pending
-- Name:
-- Date (UTC):
-- Notes: QA matrix is fully PASS; walkthrough pass is recorded with fresh evidence links.
+- Decision: Approved
+- Name: Confirmed by QA (via session)
+- Date (UTC): 2026-02-22T22:12:25Z
+- Notes: QA matrix and walkthrough evidence accepted.
 
 ## Gate decision
 
-- Final decision: Pending
-- Recorded by:
-- Date (UTC):
+- Final decision: Pass
+- Recorded by: Integrator session (based on explicit user confirmation of all three approvals)
+- Date (UTC): 2026-02-22T22:12:25Z

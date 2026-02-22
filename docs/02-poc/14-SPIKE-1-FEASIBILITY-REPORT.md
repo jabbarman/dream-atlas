@@ -32,7 +32,7 @@ Implemented in this spike:
 ## Bottlenecks and limitations
 
 1. Stress evidence remains manual; telemetry export is available, but automated scheduled capture is still not in place.
-2. POC gate packet is complete, but explicit PM + Tech Lead + QA approvals are still pending in the sign-off record.
+2. MVP still needs frontend integration for atlas listing UX (API listing is implemented).
 
 ## Risk posture
 
@@ -42,13 +42,13 @@ Implemented in this spike:
 
 ## Recommendation
 
-Decision: **GO (conditional)** for continued POC progression and MVP-prep planning.
+Decision: **GO** for MVP execution.
 
 Conditions to close before formal POC gate sign-off:
-1. Record PM + Tech Lead + QA explicit sign-off note against this report.
+1. Closed on 2026-02-22: PM + Tech Lead + QA sign-off recorded in `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`.
 
 ## Proposed next execution slice
 
-1. Validate API and frontend telemetry fields in sign-off walkthrough.
-2. Run sign-off review and complete `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`.
+1. Complete MVP Slice 1 closure with frontend atlas list picker integration and QA evidence update.
+2. Continue MVP Slice 2 (user data ingestion) after Slice 1 closure.
 3. Decide whether automated telemetry capture should be added for MVP or kept as post-MVP observability work.

@@ -89,3 +89,31 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: artifact consistency pass against discovery backlog, workflow gate criteria, and latest POC evidence packet.
 - Outcome: team can start MVP Slice 1 immediately after POC gate approval, with dependencies and acceptance checks already documented.
+
+### Stage: POC gate approval recording
+- Date (UTC): 2026-02-22T22:12:25Z
+- Integrator role: recorded confirmed PM/Tech Lead/QA approvals, updated formal sign-off record and POC gate checklist, and moved project state from `poc-active` to `mvp-active`.
+- Delegated agent role: none (single-session implementation).
+- Validation: cross-check between sign-off record, gate checklist, and live status/state artifacts.
+- Outcome: POC gate is formally passed and MVP execution is now the active project phase.
+
+### Stage: MVP Slice 1 API persistence hardening
+- Date (UTC): 2026-02-22T22:12:14Z
+- Integrator role: replaced transient snapshot storage with SQLite-backed persistence, added paginated `GET /atlas` listing endpoint, and added snapshot `schemaVersion` support in generate/save/load flows.
+- Delegated agent role: none (single-session implementation).
+- Validation: restart durability smoke test (`generate -> list -> save -> restart -> load -> list`) on temp DB path with pass checks for schema versioning and perf fields.
+- Outcome: Slice 1 API foundation is complete; remaining Slice 1 work is frontend atlas-list picker wiring and QA evidence closure.
+
+### Stage: MVP Slice 1 frontend listing integration
+- Date (UTC): 2026-02-22T22:15:57Z
+- Integrator role: wired the new `/atlas` listing endpoint into the web UI with a saved-atlas selector and manual refresh control to remove manual snapshot-id copy/paste during load flows.
+- Delegated agent role: none (single-session implementation).
+- Validation: `npm run build:web`.
+- Outcome: Slice 1 persistence flow is now end-to-end in product UX; next work is dedicated Slice 1 QA evidence capture.
+
+### Stage: MVP Slice 1 QA evidence capture
+- Date (UTC): 2026-02-22T22:18:32Z
+- Integrator role: executed API durability smoke runs and browser picker-load walkthrough, then recorded evidence artifacts and Slice 1 QA report.
+- Delegated agent role: none (single-session implementation).
+- Validation: API restart smoke (`generate -> list -> save -> restart -> load -> list`) + browser snapshot proving picker-based load transition.
+- Outcome: Slice 1 is marked PASS with evidence, and execution can move to MVP Slice 2 ingestion work.

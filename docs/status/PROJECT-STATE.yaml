@@ -1,10 +1,10 @@
 project: Dream Atlas
-state: poc-active
-current_phase: poc
+state: mvp-active
+current_phase: mvp
 execution_state: active
-updated_at: '2026-02-22T22:02:14Z'
-last_progress_event_at: '2026-02-22T22:02:14Z'
-progress_events_today: 22
+updated_at: '2026-02-22T22:19:24Z'
+last_progress_event_at: '2026-02-22T22:19:24Z'
+progress_events_today: 25
 team:
   pm: ready
   product: ready
@@ -15,19 +15,19 @@ team:
 observability:
   live_status_file: docs/status/LIVE-STATUS.md
   work_signal: strong
-  work_signal_reason: POC sign-off packet is approval-ready and MVP-prep scope/plan/backlog
-    drafts are now staged for immediate execution after gate approval.
-  last_real_work_event_at: '2026-02-22T21:49:27+00:00'
-  last_real_work_event_ref: a7d861eb5267b4661ee1d5858ec1023078274d08
-  real_work_events_today: 5
-  updated_at: '2026-02-22T22:02:14Z'
-  implementation_artifacts_count: 21
+  work_signal_reason: MVP Slice 1 is complete with QA evidence captured (durability
+    + listing + picker flow).
+  last_real_work_event_at: '2026-02-22T22:15:57+00:00'
+  last_real_work_event_ref: af8e9866ae602936b733e13bfd64acf3d038954f
+  real_work_events_today: 7
+  updated_at: '2026-02-22T22:19:24Z'
+  implementation_artifacts_count: 26
 milestones:
   discovery_gate:
     status: passed
     event_id: milestone-discovery-gate-v1
   poc_gate:
-    status: pending
+    status: passed
     event_id: milestone-poc-gate-v1
   mvp_ready:
     status: pending
@@ -39,6 +39,9 @@ resolved_major_problems:
 - API timing precision upgraded to high-resolution perf metrics in generate/save/load flows.
 - Lightweight render telemetry (current/avg FPS + p95 frame ms) added to POC run summary.
 - Telemetry export from POC controls enables persisted JSON evidence for sign-off walkthroughs.
-next_step: Collect PM + Tech Lead + QA approval entries in
-  `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`, record final POC gate decision,
-  then start MVP Slice 1 from `docs/03-mvp/02-MVP-IMPLEMENTATION-PLAN.md`.
+- POC gate approvals and final pass decision are now recorded.
+- MVP Slice 1 API persistence hardening delivered (SQLite storage + atlas listing endpoint).
+- MVP Slice 1 frontend atlas picker is wired to the listing API.
+- MVP Slice 1 QA evidence pass completed and recorded.
+next_step: Start MVP Slice 2 user-data ingestion (manual fragment entry + JSON
+  paste/import flow).
