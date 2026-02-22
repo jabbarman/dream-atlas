@@ -33,3 +33,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: `npm run build:web`; API round-trip checks for mode differences and save/load context restoration; in-browser synthetic pan/zoom stress (2 x 30s) with no runtime errors.
 - Outcome: QA-03/QA-04/QA-06 now evidenced as PASS in matrix, and persistence behavior is visible/testable directly in the POC UI.
+
+### Stage: Remaining QA closure + evidence capture
+- Date (UTC): 2026-02-22T18:56:36Z
+- Integrator role: added explicit selection transition controls (`Clear Selection`) and lightweight debug instrumentation for deterministic UI-state checks; executed QA-05/QA-08/QA-09/QA-10 validations; captured UI evidence screenshot.
+- Delegated agent role: none (single-session implementation).
+- Validation: `npm run build:web`; API checks for invalid-type validation, noisy/ambiguous dataset robustness, and mode-switch save/load regression; browser verification of selection state transitions and saved snapshot mode restoration.
+- Outcome: QA matrix now records all 10 scenarios as PASS, and evidence artifact added at `docs/02-poc/evidence/poc-ui-stage-qa.png`.

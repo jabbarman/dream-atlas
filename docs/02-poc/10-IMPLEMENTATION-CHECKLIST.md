@@ -1,7 +1,7 @@
 # Implementation Checklist (Dev)
 
 Owner: Dev  
-Status: In progress (First end-to-end slice implemented)
+Status: In progress (QA sweep complete; gate packaging pending)
 
 ## Phase A — Foundation (must-have)
 
@@ -44,8 +44,8 @@ Status: In progress (First end-to-end slice implemented)
 
 - [x] Determinism check: same seed + same input => stable layout structure
 - [x] Error handling for empty/invalid input
-- [x] Basic smoke pass against QA matrix (QA-01/QA-02/QA-03/QA-04/QA-06/QA-07)
-- [ ] Capture demo artifact (gif/video)
+- [x] Basic smoke pass against QA matrix (QA-01/QA-02/QA-03/QA-04/QA-05/QA-06/QA-07/QA-08/QA-09/QA-10)
+- [x] Capture demo artifact (screenshot): `docs/02-poc/evidence/poc-ui-stage-qa.png`
 
 ## Immediate execution order (next 60 min)
 
