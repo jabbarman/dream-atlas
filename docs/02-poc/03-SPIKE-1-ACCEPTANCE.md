@@ -15,11 +15,12 @@ Status: Executed; formal sign-off pending
 - [x] No open critical defects in core flow.
 - [x] Deterministic seed behavior validated (same seed => same layout).
 - [x] QA matrix executed for happy path + edge cases.
-- [ ] Demo capture available (video/gif). (Current artifact: screenshot at `docs/02-poc/evidence/poc-ui-stage-qa.png`)
+- [x] Demo capture available (video/gif). (`docs/02-poc/evidence/poc-demo-flow.gif`)
 - [ ] PM + Tech Lead + QA sign-off recorded.
 
 ## Evidence artifacts
-- Demo: `docs/02-poc/evidence/` (screenshot present; GIF/video pending)
+- Demo: `docs/02-poc/evidence/` (GIF + screenshot available)
 - Perf snapshot: `docs/02-poc/09-PERFORMANCE-BUDGETS.md`
 - QA results: `docs/02-poc/12-QA-TEST-MATRIX.md`
 - Defects: `docs/02-poc/13-DEFECT-LOG.md`
+- Sign-off record: `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`

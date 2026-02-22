@@ -43,11 +43,9 @@ Decision: **GO (conditional)** for continued POC progression and MVP-prep planni
 
 Conditions to close before formal POC gate sign-off:
 1. Add high-resolution perf instrumentation in API timing.
-2. Capture at least one short GIF/video demo of core flow.
-3. Record PM + Tech Lead + QA explicit sign-off note against this report.
+2. Record PM + Tech Lead + QA explicit sign-off note against this report.
 
 ## Proposed next execution slice
 
 1. Implement precise timing instrumentation (`performance.now`/perf hooks) in API response metrics.
-2. Produce demo capture artifact and attach to `docs/02-poc/evidence/`.
-3. Add sign-off record document for POC gate package.
+2. Run sign-off review and complete `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`.

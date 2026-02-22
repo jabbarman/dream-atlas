@@ -47,3 +47,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: performance benchmark script (20-iteration runs for 50/100 fragment generation and save/load); artifact cross-check against QA matrix and acceptance criteria.
 - Outcome: evidence bundle assembled and linked, with next-step narrowed to demo GIF/video capture and formal PM/Tech Lead/QA sign-off.
+
+### Stage: Demo artifact + sign-off packet completion
+- Date (UTC): 2026-02-22T21:11:53Z
+- Integrator role: captured multi-frame UI flow and produced `poc-demo-flow.gif`; added formal sign-off record template and linked it from acceptance/gate artifacts.
+- Delegated agent role: none (single-session implementation).
+- Validation: browser-driven flow capture (mode switch, save/load, selection) and artifact build using ImageMagick (`convert`).
+- Outcome: demo requirement is satisfied; only explicit PM/Tech Lead/QA approvals remain for formal gate closure.
