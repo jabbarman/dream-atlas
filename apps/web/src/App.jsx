@@ -66,7 +66,11 @@ export default function App() {
   const [atlas, setAtlas] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoadingAtlas, setIsLoadingAtlas] = useState(false);
   const [error, setError] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
+  const [snapshotIdInput, setSnapshotIdInput] = useState("");
 
   const selectedNode = useMemo(
     () => atlas?.nodes.find((node) => node.id === selectedNodeId) ?? null,
@@ -82,6 +86,53 @@ export default function App() {
     if (!atlas) return "";
     return createLayoutSignature(atlas.nodes);
   }, [atlas]);
+
+  const clusterSummary = useMemo(() => {
+    if (!atlas) return [];
+    return [...atlas.clusters]
+      .sort((a, b) => a.id.localeCompare(b.id))
+      .map((cluster) => ({
+        id: cluster.id,
+        label: cluster.label,
+        reason: cluster.reason,
+        nodeCount: cluster.nodeCount,
+      }));
+  }, [atlas]);
+
+  function getCameraState() {
+    const world = worldRef.current;
+    if (!world) {
+      return {
+        zoom: 1,
+        panX: 0,
+        panY: 0,
+      };
+    }
+    return {
+      zoom: Number(world.scale.x.toFixed(4)),
+      panX: Number(world.x.toFixed(2)),
+      panY: Number(world.y.toFixed(2)),
+    };
+  }
+
+  function applyCameraState(uiState, fallbackAtlas) {
+    const world = worldRef.current;
+    if (!world) return;
+
+    if (
+      uiState &&
+      Number.isFinite(uiState.zoom) &&
+      Number.isFinite(uiState.panX) &&
+      Number.isFinite(uiState.panY)
+    ) {
+      world.scale.set(clamp(uiState.zoom, 0.35, 3.5));
+      world.x = uiState.panX;
+      world.y = uiState.panY;
+      return;
+    }
+
+    fitCameraToAtlas(fallbackAtlas);
+  }
 
   function fitCameraToAtlas(targetAtlas) {
     const app = appRef.current;
@@ -111,6 +162,7 @@ export default function App() {
   async function runGeneration() {
     setIsGenerating(true);
     setError("");
+    setStatusMessage("");
 
     try {
       const response = await fetch(`${API_BASE_URL}/atlas/generate`, {
@@ -130,12 +182,88 @@ export default function App() {
 
       setAtlas(payload);
       setSelectedNodeId(null);
+      setSnapshotIdInput(payload.id ?? "");
+      setStatusMessage(`Generated ${payload.nodeCount} nodes in ${payload.perf?.generationMs ?? "?"}ms.`);
       requestAnimationFrame(() => fitCameraToAtlas(payload));
     } catch (requestError) {
       setAtlas(null);
       setError(requestError.message || "Failed to generate atlas");
     } finally {
       setIsGenerating(false);
+    }
+  }
+
+  async function saveSnapshot() {
+    if (!atlas?.id) {
+      setError("Generate an atlas before saving.");
+      return;
+    }
+
+    setIsSaving(true);
+    setError("");
+    setStatusMessage("");
+
+    try {
+      const payload = {
+        ...atlas,
+        uiState: {
+          selectedNodeId,
+          ...getCameraState(),
+        },
+      };
+
+      const response = await fetch(`${API_BASE_URL}/atlas/${atlas.id}/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const body = await response.json();
+      if (!response.ok) {
+        throw new Error(body.error || "Failed to save atlas snapshot");
+      }
+
+      setStatusMessage(`Snapshot saved: ${body.id}`);
+      setSnapshotIdInput(body.id);
+    } catch (requestError) {
+      setError(requestError.message || "Failed to save atlas snapshot");
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function loadSnapshot() {
+    const snapshotId = snapshotIdInput.trim();
+    if (!snapshotId) {
+      setError("Enter a snapshot id to load.");
+      return;
+    }
+
+    setIsLoadingAtlas(true);
+    setError("");
+    setStatusMessage("");
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/atlas/${snapshotId}/load`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(payload.error || "Failed to load atlas snapshot");
+      }
+
+      setAtlas(payload);
+      setSeed(payload.seed ?? seed);
+      setClusterMode(payload.clusterMode ?? clusterMode);
+      setSelectedNodeId(payload.uiState?.selectedNodeId ?? null);
+      setStatusMessage(`Snapshot loaded: ${payload.id}`);
+      requestAnimationFrame(() => applyCameraState(payload.uiState, payload));
+    } catch (requestError) {
+      setError(requestError.message || "Failed to load atlas snapshot");
+    } finally {
+      setIsLoadingAtlas(false);
     }
   }
 
@@ -299,13 +427,20 @@ export default function App() {
       </header>
 
       <section className="controls">
-        <label>
+        <label htmlFor="seed-input">
           Seed
-          <input value={seed} onChange={(event) => setSeed(event.target.value)} />
+          <input
+            id="seed-input"
+            name="seed"
+            value={seed}
+            onChange={(event) => setSeed(event.target.value)}
+          />
         </label>
-        <label>
+        <label htmlFor="cluster-mode">
           Cluster mode
           <select
+            id="cluster-mode"
+            name="clusterMode"
             value={clusterMode}
             onChange={(event) => setClusterMode(event.target.value)}
           >
@@ -313,8 +448,29 @@ export default function App() {
             <option value="intensity">intensity</option>
           </select>
         </label>
+        <label htmlFor="snapshot-id">
+          Snapshot ID
+          <input
+            id="snapshot-id"
+            name="snapshotId"
+            value={snapshotIdInput}
+            onChange={(event) => setSnapshotIdInput(event.target.value)}
+            placeholder="atlas-..."
+          />
+        </label>
         <button type="button" onClick={runGeneration} disabled={isGenerating}>
           {isGenerating ? "Generating..." : "Generate Atlas"}
+        </button>
+        <button type="button" className="secondary" onClick={saveSnapshot} disabled={!atlas || isSaving}>
+          {isSaving ? "Saving..." : "Save Snapshot"}
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={loadSnapshot}
+          disabled={isLoadingAtlas}
+        >
+          {isLoadingAtlas ? "Loading..." : "Load Snapshot"}
         </button>
         <button
           type="button"
@@ -327,19 +483,35 @@ export default function App() {
       </section>
 
       {error ? <p className="error">{error}</p> : null}
+      {statusMessage ? <p className="status">{statusMessage}</p> : null}
 
       <section className="workspace">
         <div className="canvas-wrap" ref={canvasRef} />
         <aside className="panel">
           <h2>Run Summary</h2>
           <ul>
+            <li>Snapshot: {atlas?.id ?? "-"}</li>
             <li>Fragments: {SAMPLE_FRAGMENTS.length}</li>
             <li>Nodes: {atlas?.nodeCount ?? 0}</li>
             <li>Clusters: {atlas?.clusters.length ?? 0}</li>
             <li>Mode: {atlas?.clusterMode ?? "-"}</li>
+            <li>Layout: {atlas?.layout?.shape ?? "-"}</li>
             <li>Generation: {atlas?.perf?.generationMs ?? "-"} ms</li>
             <li>Signature: {layoutSignature ? `${layoutSignature.slice(0, 18)}...` : "-"}</li>
           </ul>
+
+          <h2>Cluster Reasons</h2>
+          {clusterSummary.length > 0 ? (
+            <ul>
+              {clusterSummary.map((cluster) => (
+                <li key={cluster.id}>
+                  {cluster.label} ({cluster.nodeCount}): {cluster.reason}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No clusters loaded.</p>
+          )}
 
           <h2>Selected Node</h2>
           {selectedNode && selectedFragment ? (

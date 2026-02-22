@@ -39,7 +39,7 @@ p {
 
 .controls input,
 .controls select {
-  min-width: 180px;
+  min-width: 160px;
   border: 1px solid #2e426f;
   border-radius: 8px;
   background: #0f1730;
@@ -112,6 +112,12 @@ p {
 
 .error {
   color: #ff9797;
+  margin-top: 0;
+}
+
+.status {
+  color: #9fe2bb;
+  margin-top: 0;
 }
 
 @media (max-width: 980px) {
