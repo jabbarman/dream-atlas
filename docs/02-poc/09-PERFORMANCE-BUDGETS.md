@@ -34,3 +34,4 @@ Notes:
 - Interaction stress (pan/zoom) executed for 60s total in browser with no runtime errors (QA-04 PASS).
 - API perf payload now uses high-resolution timing (`performance.now`) with phase metrics (`normalizeMs`, `clusterMs`, `layoutMs`) and request/save/load timings (`requestMs`, `saveMs`, `loadMs`) from commit `9c9a704`.
 - Frontend run summary now includes live render telemetry (`current/avg FPS`, `p95 frame ms`) for in-session observability (commit `51764e7`).
+- Frontend now supports one-click telemetry export (`Export Telemetry`) to JSON for evidence persistence during sign-off walkthroughs (commit `a7d861e`).

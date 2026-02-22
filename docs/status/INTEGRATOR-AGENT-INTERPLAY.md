@@ -68,3 +68,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: `npm run build:web`.
 - Outcome: the POC now surfaces live render performance signals in-session; remaining observability gap is telemetry export/persistence automation.
+
+### Stage: Telemetry export enablement
+- Date (UTC): 2026-02-22T21:49:27Z
+- Integrator role: added `Export Telemetry` control to download JSON snapshots containing API perf metrics, render metrics, camera state, and selection context for evidence capture.
+- Delegated agent role: none (single-session implementation).
+- Validation: `npm run build:web`.
+- Outcome: sign-off walkthrough can now produce persisted telemetry artifacts without manual copy/paste; remaining dependency is explicit PM/Tech Lead/QA approval entries.

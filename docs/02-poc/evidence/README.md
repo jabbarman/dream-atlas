@@ -4,3 +4,4 @@
 - `perf-snapshot-2026-02-22.md`: API generation and save/load latency snapshot with budget comparison.
 - `poc-demo-flow.gif`: Short demo flow showing mode switch, save/load roundtrip, and selection state transitions.
 - `demo-frames/`: Source frame sequence used to produce `poc-demo-flow.gif`.
+- Runtime telemetry export: use `Export Telemetry` in the POC UI to download a JSON snapshot (API + render + camera metrics) during sign-off walkthroughs.
