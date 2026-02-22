@@ -82,9 +82,11 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoadingAtlas, setIsLoadingAtlas] = useState(false);
+  const [isRefreshingAtlasList, setIsRefreshingAtlasList] = useState(false);
   const [error, setError] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [snapshotIdInput, setSnapshotIdInput] = useState("");
+  const [atlasList, setAtlasList] = useState([]);
   const [renderPerf, setRenderPerf] = useState({
     fpsCurrent: null,
     fpsAverage: null,
@@ -189,6 +191,37 @@ export default function App() {
     world.y = viewHeight / 2 - centerY * scale;
   }
 
+  async function refreshAtlasList({ preferredSnapshotId = null, silent = false } = {}) {
+    if (!silent) {
+      setIsRefreshingAtlasList(true);
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/atlas?limit=50&offset=0`);
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(payload.error || "Failed to fetch atlas list");
+      }
+
+      const items = Array.isArray(payload.items) ? payload.items : [];
+      setAtlasList(items);
+
+      if (preferredSnapshotId) {
+        setSnapshotIdInput(preferredSnapshotId);
+      } else if (!snapshotIdInput && items.length > 0) {
+        setSnapshotIdInput(items[0].id);
+      }
+    } catch (requestError) {
+      if (!silent) {
+        setError(requestError.message || "Failed to fetch atlas list");
+      }
+    } finally {
+      if (!silent) {
+        setIsRefreshingAtlasList(false);
+      }
+    }
+  }
+
   async function runGeneration() {
     setIsGenerating(true);
     setError("");
@@ -215,6 +248,7 @@ export default function App() {
       setSnapshotIdInput(payload.id ?? "");
       setStatusMessage(`Generated ${payload.nodeCount} nodes in ${payload.perf?.generationMs ?? "?"}ms.`);
       requestAnimationFrame(() => fitCameraToAtlas(payload));
+      refreshAtlasList({ preferredSnapshotId: payload.id, silent: true });
     } catch (requestError) {
       setAtlas(null);
       setError(requestError.message || "Failed to generate atlas");
@@ -255,6 +289,7 @@ export default function App() {
 
       setStatusMessage(`Snapshot saved: ${body.id}`);
       setSnapshotIdInput(body.id);
+      refreshAtlasList({ preferredSnapshotId: body.id, silent: true });
     } catch (requestError) {
       setError(requestError.message || "Failed to save atlas snapshot");
     } finally {
@@ -290,6 +325,7 @@ export default function App() {
       setSelectedNodeId(payload.uiState?.selectedNodeId ?? null);
       setStatusMessage(`Snapshot loaded: ${payload.id}`);
       requestAnimationFrame(() => applyCameraState(payload.uiState, payload));
+      refreshAtlasList({ preferredSnapshotId: payload.id, silent: true });
     } catch (requestError) {
       setError(requestError.message || "Failed to load atlas snapshot");
     } finally {
@@ -475,6 +511,7 @@ export default function App() {
 
   useEffect(() => {
     runGeneration();
+    refreshAtlasList({ silent: true });
     // Run once on boot with the default seed + mode.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -603,6 +640,22 @@ export default function App() {
             placeholder="atlas-..."
           />
         </label>
+        <label htmlFor="saved-atlas-select">
+          Saved Atlases
+          <select
+            id="saved-atlas-select"
+            name="savedAtlas"
+            value={snapshotIdInput}
+            onChange={(event) => setSnapshotIdInput(event.target.value)}
+          >
+            <option value="">select snapshot...</option>
+            {atlasList.map((snapshot) => (
+              <option key={snapshot.id} value={snapshot.id}>
+                {snapshot.id} ({snapshot.clusterMode ?? "-"}, {snapshot.nodeCount ?? 0} nodes)
+              </option>
+            ))}
+          </select>
+        </label>
         <button type="button" onClick={runGeneration} disabled={isGenerating}>
           {isGenerating ? "Generating..." : "Generate Atlas"}
         </button>
@@ -616,6 +669,14 @@ export default function App() {
           disabled={isLoadingAtlas}
         >
           {isLoadingAtlas ? "Loading..." : "Load Snapshot"}
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={() => refreshAtlasList()}
+          disabled={isRefreshingAtlasList}
+        >
+          {isRefreshingAtlasList ? "Refreshing..." : "Refresh Atlases"}
         </button>
         <button
           type="button"
