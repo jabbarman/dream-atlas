@@ -3,6 +3,8 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 import { SAMPLE_FRAGMENTS } from "./data/sampleFragments";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8787";
+const FPS_SAMPLE_LIMIT = 240;
+const FPS_UPDATE_INTERVAL_MS = 500;
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
@@ -24,6 +26,13 @@ function createLayoutSignature(nodes) {
     .sort((a, b) => a.id.localeCompare(b.id))
     .map((node) => `${node.id}:${node.clusterId}:${node.x}:${node.y}`)
     .join("|");
+}
+
+function percentile(values, p) {
+  if (!Array.isArray(values) || values.length === 0) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const index = Math.min(sorted.length - 1, Math.floor((sorted.length - 1) * p));
+  return sorted[index];
 }
 
 function computeAtlasBounds(atlas) {
@@ -61,6 +70,11 @@ export default function App() {
   const worldRef = useRef(null);
   const wheelHandlerRef = useRef(null);
   const dragRef = useRef({ active: false, lastX: 0, lastY: 0 });
+  const frameStatsRef = useRef({
+    lastFrameTs: 0,
+    lastUiUpdateTs: 0,
+    frameMsSamples: [],
+  });
   const [seed, setSeed] = useState("spike-seed-01");
   const [clusterMode, setClusterMode] = useState("theme");
   const [atlas, setAtlas] = useState(null);
@@ -71,6 +85,12 @@ export default function App() {
   const [error, setError] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [snapshotIdInput, setSnapshotIdInput] = useState("");
+  const [renderPerf, setRenderPerf] = useState({
+    fpsCurrent: null,
+    fpsAverage: null,
+    p95FrameMs: null,
+    sampleCount: 0,
+  });
 
   const selectedNode = useMemo(
     () => atlas?.nodes.find((node) => node.id === selectedNodeId) ?? null,
@@ -330,6 +350,43 @@ export default function App() {
         }
       });
 
+      const tickerHandler = () => {
+        const now = performance.now();
+        const frameStats = frameStatsRef.current;
+        if (!frameStats.lastFrameTs) {
+          frameStats.lastFrameTs = now;
+          frameStats.lastUiUpdateTs = now;
+          return;
+        }
+
+        const frameMs = now - frameStats.lastFrameTs;
+        frameStats.lastFrameTs = now;
+        if (!Number.isFinite(frameMs) || frameMs <= 0 || frameMs > 250) return;
+
+        frameStats.frameMsSamples.push(frameMs);
+        if (frameStats.frameMsSamples.length > FPS_SAMPLE_LIMIT) {
+          frameStats.frameMsSamples.shift();
+        }
+
+        if (now - frameStats.lastUiUpdateTs < FPS_UPDATE_INTERVAL_MS) return;
+        frameStats.lastUiUpdateTs = now;
+
+        const samples = frameStats.frameMsSamples;
+        const total = samples.reduce((acc, value) => acc + value, 0);
+        const averageFrameMs = samples.length > 0 ? total / samples.length : null;
+        const latestFrameMs = samples.length > 0 ? samples[samples.length - 1] : null;
+        const p95FrameMs = percentile(samples, 0.95);
+
+        setRenderPerf({
+          fpsCurrent: latestFrameMs ? Number((1000 / latestFrameMs).toFixed(1)) : null,
+          fpsAverage: averageFrameMs ? Number((1000 / averageFrameMs).toFixed(1)) : null,
+          p95FrameMs: p95FrameMs ? Number(p95FrameMs.toFixed(2)) : null,
+          sampleCount: samples.length,
+        });
+      };
+
+      app.ticker.add(tickerHandler);
+
       wheelHandlerRef.current = (event) => {
         event.preventDefault();
         const scaleBefore = world.scale.x;
@@ -348,9 +405,13 @@ export default function App() {
       };
 
       app.canvas.addEventListener("wheel", wheelHandlerRef.current, { passive: false });
-    }
 
-    init();
+      return tickerHandler;
+    }
+    let tickerHandler = null;
+    init().then((handler) => {
+      tickerHandler = handler;
+    });
 
     return () => {
       isDisposed = true;
@@ -359,6 +420,9 @@ export default function App() {
         liveApp.canvas.removeEventListener("wheel", wheelHandlerRef.current);
       }
       if (liveApp) {
+        if (tickerHandler) {
+          liveApp.ticker.remove(tickerHandler);
+        }
         liveApp.destroy(true, { children: true });
       }
       appRef.current = null;
@@ -445,12 +509,13 @@ export default function App() {
         clearSelection();
         return true;
       },
+      getRenderPerf: () => renderPerf,
     };
 
     return () => {
       delete window.__dreamAtlasDebug;
     };
-  }, [atlas, selectedNodeId]);
+  }, [atlas, selectedNodeId, renderPerf]);
 
   return (
     <div className="page">
@@ -538,6 +603,10 @@ export default function App() {
             <li>Mode: {atlas?.clusterMode ?? "-"}</li>
             <li>Layout: {atlas?.layout?.shape ?? "-"}</li>
             <li>Generation: {atlas?.perf?.generationMs ?? "-"} ms</li>
+            <li>
+              Render FPS: {renderPerf.fpsCurrent ?? "-"} current / {renderPerf.fpsAverage ?? "-"} avg
+            </li>
+            <li>Render p95 frame: {renderPerf.p95FrameMs ?? "-"} ms ({renderPerf.sampleCount} samples)</li>
             <li>Signature: {layoutSignature ? `${layoutSignature.slice(0, 18)}...` : "-"}</li>
           </ul>
 
