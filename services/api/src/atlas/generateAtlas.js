@@ -1,3 +1,5 @@
+import { performance } from "node:perf_hooks";
+
 const SUPPORTED_CLUSTER_MODES = new Set(["theme", "intensity"]);
 
 function stringToSeed(input) {
@@ -96,6 +98,10 @@ function clusterFragments(fragments, clusterMode) {
   return Array.from(groups.values()).sort((a, b) => a.id.localeCompare(b.id));
 }
 
+function toMs(value) {
+  return Number(value.toFixed(3));
+}
+
 export function validateGenerateRequest(payload) {
   const body = payload ?? {};
   const errors = [];
@@ -177,10 +183,17 @@ export function validateGenerateRequest(payload) {
 }
 
 export function generateAtlasSnapshot({ fragments, seed, clusterMode }) {
-  const start = Date.now();
+  const start = performance.now();
   const rng = createRng(`${seed}:${clusterMode}:${fragments.length}`);
+  const normalizeStart = performance.now();
   const normalized = fragments.map((fragment) => normalizeFragment(fragment));
+  const normalizeMs = performance.now() - normalizeStart;
+
+  const clusterStart = performance.now();
   const clusterGroups = clusterFragments(normalized, clusterMode);
+  const clusterMs = performance.now() - clusterStart;
+
+  const layoutStart = performance.now();
   const clusters = [];
   const nodes = [];
   const totalClusters = Math.max(clusterGroups.length, 1);
@@ -221,6 +234,8 @@ export function generateAtlasSnapshot({ fragments, seed, clusterMode }) {
       nodeCount: sortedFragments.length,
     });
   });
+  const layoutMs = performance.now() - layoutStart;
+  const generationMs = performance.now() - start;
 
   return {
     id: `atlas-${stringToSeed(`${seed}:${clusterMode}:${normalized.length}`).toString(16)}`,
@@ -242,7 +257,13 @@ export function generateAtlasSnapshot({ fragments, seed, clusterMode }) {
       panY: 0,
     },
     perf: {
-      generationMs: Date.now() - start,
+      generationMs: toMs(generationMs),
+      phases: {
+        normalizeMs: toMs(normalizeMs),
+        clusterMs: toMs(clusterMs),
+        layoutMs: toMs(layoutMs),
+      },
+      timingSource: "performance.now",
     },
   };
 }
