@@ -61,3 +61,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: API smoke check for generate/save/load responses confirming `timingSource`, phase timings, and roundtrip timing fields.
 - Outcome: timing-precision gap is closed for POC; remaining gate dependency is explicit PM/Tech Lead/QA sign-off.
+
+### Stage: Frontend render telemetry pass
+- Date (UTC): 2026-02-22T21:42:14Z
+- Integrator role: added lightweight Pixi ticker telemetry in the frontend and exposed run-summary metrics for `current FPS`, `average FPS`, and `p95 frame time` to support manual perf walkthroughs.
+- Delegated agent role: none (single-session implementation).
+- Validation: `npm run build:web`.
+- Outcome: the POC now surfaces live render performance signals in-session; remaining observability gap is telemetry export/persistence automation.

@@ -2,9 +2,9 @@ project: Dream Atlas
 state: poc-active
 current_phase: poc
 execution_state: active
-updated_at: '2026-02-22T21:35:40Z'
-last_progress_event_at: '2026-02-22T21:35:40Z'
-progress_events_today: 18
+updated_at: '2026-02-22T21:42:52Z'
+last_progress_event_at: '2026-02-22T21:42:52Z'
+progress_events_today: 19
 team:
   pm: ready
   product: ready
@@ -15,12 +15,12 @@ team:
 observability:
   live_status_file: docs/status/LIVE-STATUS.md
   work_signal: strong
-  work_signal_reason: High-resolution API perf timing metrics are now shipped; POC
-    gate closure remains pending explicit PM/Tech Lead/QA approvals.
-  last_real_work_event_at: '2026-02-22T21:31:44+00:00'
-  last_real_work_event_ref: 9c9a7046adf7db08b930fd9bf98b63c80b1aa639
-  real_work_events_today: 3
-  updated_at: '2026-02-22T21:35:40Z'
+  work_signal_reason: Live frontend FPS/frame telemetry is now available in the POC
+    run summary; gate closure still depends on explicit PM/Tech Lead/QA approvals.
+  last_real_work_event_at: '2026-02-22T21:42:14+00:00'
+  last_real_work_event_ref: 51764e7bd8ae7cd86a813ed3a6e8a4ff739718bc
+  real_work_events_today: 4
+  updated_at: '2026-02-22T21:42:52Z'
   implementation_artifacts_count: 14
 milestones:
   discovery_gate:
@@ -37,6 +37,7 @@ milestones:
     event_id: milestone-launch-ready-v1
 resolved_major_problems:
 - API timing precision upgraded to high-resolution perf metrics in generate/save/load flows.
+- Lightweight render telemetry (current/avg FPS + p95 frame ms) added to POC run summary.
 next_step: Run sign-off review (PM/Tech Lead/QA) and complete
-  `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`; track automated FPS telemetry as MVP-prep
-  backlog.
+  `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`; then decide whether telemetry export
+  automation should be pulled into MVP scope.

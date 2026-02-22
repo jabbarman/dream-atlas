@@ -14,6 +14,7 @@ Implemented in this spike:
 - Interactive Pixi map with pan/zoom/select
 - Save/load snapshot API and UI controls with UI context restoration
 - High-resolution API perf instrumentation (`performance.now`) with generation phase and request/save/load timing fields
+- Live frontend render telemetry in run summary (`current/avg FPS`, `p95 frame ms`)
 - QA matrix execution with 10/10 scenarios recorded as PASS
 - Evidence artifacts captured in `docs/02-poc/evidence/`
 
@@ -28,13 +29,13 @@ Implemented in this spike:
 
 ## Bottlenecks and limitations
 
-1. Stress evidence is currently synthetic/manual; no automated FPS telemetry yet.
+1. Stress evidence is currently synthetic/manual; render telemetry is visible live but not yet auto-persisted into evidence artifacts.
 2. POC gate packet is complete, but explicit PM + Tech Lead + QA approvals are still pending in the sign-off record.
 
 ## Risk posture
 
 - Product risk: Moderate (meaningfulness still heuristic-based, but explainable)
-- Technical risk: Low (core flows stable; timing precision delivered, with automated FPS telemetry still backlog)
+- Technical risk: Low (core flows stable; timing precision and live render telemetry delivered, with telemetry export automation still backlog)
 - Delivery risk: Low for immediate POC continuation
 
 ## Recommendation
@@ -46,6 +47,6 @@ Conditions to close before formal POC gate sign-off:
 
 ## Proposed next execution slice
 
-1. Validate high-resolution API perf fields (`generationMs`, phase timings, `requestMs`, `saveMs`, `loadMs`) in sign-off walkthrough.
+1. Validate API and frontend telemetry fields in sign-off walkthrough.
 2. Run sign-off review and complete `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`.
-3. Carry automated FPS telemetry as MVP-prep observability backlog item.
+3. Carry telemetry export/persistence automation as MVP-prep observability backlog item.
