@@ -33,7 +33,7 @@ Status: In progress (First end-to-end slice implemented)
 - [x] Implement `POST /atlas/generate`
 - [x] Implement `POST /atlas/:id/save`
 - [x] Implement `POST /atlas/:id/load`
-- [ ] Ensure snapshot restores UI context
+- [x] Ensure snapshot restores UI context
 
 ### B2. Performance hooks
 - [x] Add generation timing instrumentation
@@ -44,7 +44,7 @@ Status: In progress (First end-to-end slice implemented)
 
 - [x] Determinism check: same seed + same input => stable layout structure
 - [x] Error handling for empty/invalid input
-- [x] Basic smoke pass against QA matrix (QA-01/QA-02/QA-07)
+- [x] Basic smoke pass against QA matrix (QA-01/QA-02/QA-03/QA-04/QA-06/QA-07)
 - [ ] Capture demo artifact (gif/video)
 
 ## Immediate execution order (next 60 min)

@@ -26,3 +26,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: `npm run build:web`; API smoke check for 50-fragment deterministic generation with ellipse metadata; DevTools MCP snapshot + console check.
 - Outcome: improved atlas fit inside rectangular viewport with less clipping pressure, plus clearer labels and explicit Fit View control for quick recentering.
+
+### Stage: QA-focused persistence + interaction hardening
+- Date (UTC): 2026-02-22T18:03:57Z
+- Integrator role: implemented snapshot save/load controls with UI context restoration (selected node + camera transform), exposed cluster reasoning details, and executed targeted QA-03/QA-04/QA-06 validations.
+- Delegated agent role: none (single-session implementation).
+- Validation: `npm run build:web`; API round-trip checks for mode differences and save/load context restoration; in-browser synthetic pan/zoom stress (2 x 30s) with no runtime errors.
+- Outcome: QA-03/QA-04/QA-06 now evidenced as PASS in matrix, and persistence behavior is visible/testable directly in the POC UI.
