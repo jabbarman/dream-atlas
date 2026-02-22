@@ -1,11 +1,17 @@
 import express from "express";
 import cors from "cors";
 import { performance } from "node:perf_hooks";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { generateAtlasSnapshot, validateGenerateRequest } from "./atlas/generateAtlas.js";
+import { SQLiteAtlasStore } from "./persistence/sqliteAtlasStore.js";
 
 const app = express();
 const port = process.env.PORT || 8787;
-const atlasStore = new Map();
+const defaultDbPath = path.resolve(fileURLToPath(new URL("../data/atlas.sqlite", import.meta.url)));
+const atlasStore = new SQLiteAtlasStore({
+  dbPath: process.env.ATLAS_DB_PATH || defaultDbPath,
+});
 
 function toMs(value) {
   return Number(value.toFixed(3));
@@ -16,6 +22,12 @@ app.use(express.json());
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true, service: "dream-atlas-api" });
+});
+
+app.get("/atlas", (req, res) => {
+  const limit = Number.parseInt(req.query.limit ?? "50", 10);
+  const offset = Number.parseInt(req.query.offset ?? "0", 10);
+  res.json(atlasStore.list({ limit, offset }));
 });
 
 app.post("/atlas/generate", (req, res) => {
@@ -30,11 +42,13 @@ app.post("/atlas/generate", (req, res) => {
   }
 
   const snapshot = generateAtlasSnapshot(validation.value);
+  const persisted = atlasStore.upsert(snapshot, { markSaved: false });
   snapshot.perf = {
-    ...snapshot.perf,
+    ...persisted.perf,
     requestMs: toMs(performance.now() - requestStart),
   };
-  atlasStore.set(snapshot.id, snapshot);
+  snapshot.schemaVersion = persisted.schemaVersion;
+  snapshot.savedAt = persisted.savedAt;
   res.json(snapshot);
 });
 
@@ -57,12 +71,21 @@ app.post("/atlas/:id/save", (req, res) => {
     return;
   }
 
-  atlasStore.set(atlasId, {
-    ...snapshot,
+  const persisted = atlasStore.upsert(
+    {
+      ...snapshot,
+      id: atlasId,
+      schemaVersion: Number.parseInt(snapshot.schemaVersion ?? "1", 10) || 1,
+      savedAt: new Date().toISOString(),
+    },
+    { markSaved: true },
+  );
+  res.json({
+    ok: true,
     id: atlasId,
-    savedAt: new Date().toISOString(),
+    schemaVersion: persisted.schemaVersion,
+    perf: { saveMs: toMs(performance.now() - saveStart) },
   });
-  res.json({ ok: true, id: atlasId, perf: { saveMs: toMs(performance.now() - saveStart) } });
 });
 
 app.post("/atlas/:id/load", (req, res) => {
@@ -84,3 +107,20 @@ app.post("/atlas/:id/load", (req, res) => {
 app.listen(port, () => {
   console.log(`Dream Atlas API listening on :${port}`);
 });
+
+function closeStore() {
+  atlasStore.close();
+}
+
+let isShuttingDown = false;
+
+function shutdown() {
+  if (isShuttingDown) return;
+  isShuttingDown = true;
+  closeStore();
+  process.exit(0);
+}
+
+process.on("exit", closeStore);
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);

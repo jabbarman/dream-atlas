@@ -1,6 +1,7 @@
 import { performance } from "node:perf_hooks";
 
 const SUPPORTED_CLUSTER_MODES = new Set(["theme", "intensity"]);
+const SNAPSHOT_SCHEMA_VERSION = 1;
 
 function stringToSeed(input) {
   let hash = 2166136261;
@@ -239,6 +240,7 @@ export function generateAtlasSnapshot({ fragments, seed, clusterMode }) {
 
   return {
     id: `atlas-${stringToSeed(`${seed}:${clusterMode}:${normalized.length}`).toString(16)}`,
+    schemaVersion: SNAPSHOT_SCHEMA_VERSION,
     seed,
     clusterMode,
     nodeCount: nodes.length,
