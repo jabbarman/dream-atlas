@@ -297,6 +297,49 @@ export default function App() {
     }
   }
 
+  function exportPerfSnapshot() {
+    if (!atlas) {
+      setError("Generate or load an atlas before exporting telemetry.");
+      return;
+    }
+
+    const capturedAt = new Date().toISOString();
+    const exportPayload = {
+      capturedAt,
+      atlas: {
+        id: atlas.id,
+        seed: atlas.seed,
+        clusterMode: atlas.clusterMode,
+        nodeCount: atlas.nodeCount,
+        clusterCount: atlas.clusters?.length ?? 0,
+        layout: atlas.layout ?? null,
+      },
+      apiPerf: atlas.perf ?? null,
+      renderPerf,
+      camera: getCameraState(),
+      selection: {
+        selectedNodeId,
+      },
+    };
+
+    const fileSafeId = (atlas.id ?? "atlas").replace(/[^a-z0-9-]/gi, "_");
+    const fileName = `perf-snapshot-${fileSafeId}-${Date.now()}.json`;
+    const blob = new Blob([JSON.stringify(exportPayload, null, 2)], {
+      type: "application/json",
+    });
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(objectUrl);
+
+    setError("");
+    setStatusMessage(`Telemetry exported: ${fileName}`);
+  }
+
   useEffect(() => {
     if (!canvasRef.current) return undefined;
 
@@ -510,6 +553,10 @@ export default function App() {
         return true;
       },
       getRenderPerf: () => renderPerf,
+      exportPerfSnapshot: () => {
+        exportPerfSnapshot();
+        return true;
+      },
     };
 
     return () => {
@@ -577,6 +624,14 @@ export default function App() {
           disabled={!atlas}
         >
           Fit View
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={exportPerfSnapshot}
+          disabled={!atlas}
+        >
+          Export Telemetry
         </button>
         <button
           type="button"
