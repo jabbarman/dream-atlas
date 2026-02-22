@@ -63,6 +63,11 @@ p {
   cursor: wait;
 }
 
+.controls button.secondary {
+  background: #13345f;
+  border-color: #2a4c7a;
+}
+
 .workspace {
   display: grid;
   gap: 14px;

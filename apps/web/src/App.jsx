@@ -26,6 +26,35 @@ function createLayoutSignature(nodes) {
     .join("|");
 }
 
+function computeAtlasBounds(atlas) {
+  if (!atlas) return null;
+
+  let xMin = Number.POSITIVE_INFINITY;
+  let yMin = Number.POSITIVE_INFINITY;
+  let xMax = Number.NEGATIVE_INFINITY;
+  let yMax = Number.NEGATIVE_INFINITY;
+
+  atlas.clusters.forEach((cluster) => {
+    xMin = Math.min(xMin, cluster.centerX - cluster.radius - 18);
+    xMax = Math.max(xMax, cluster.centerX + cluster.radius + 18);
+    yMin = Math.min(yMin, cluster.centerY - cluster.radius - 34);
+    yMax = Math.max(yMax, cluster.centerY + cluster.radius + 18);
+  });
+
+  atlas.nodes.forEach((node) => {
+    xMin = Math.min(xMin, node.x - 12);
+    xMax = Math.max(xMax, node.x + 12);
+    yMin = Math.min(yMin, node.y - 12);
+    yMax = Math.max(yMax, node.y + 12);
+  });
+
+  if (!Number.isFinite(xMin) || !Number.isFinite(yMin)) {
+    return null;
+  }
+
+  return { xMin, yMin, xMax, yMax };
+}
+
 export default function App() {
   const canvasRef = useRef(null);
   const appRef = useRef(null);
@@ -54,14 +83,29 @@ export default function App() {
     return createLayoutSignature(atlas.nodes);
   }, [atlas]);
 
-  function resetCamera() {
+  function fitCameraToAtlas(targetAtlas) {
     const app = appRef.current;
     const world = worldRef.current;
     if (!app || !world || !canvasRef.current) return;
+    const bounds = computeAtlasBounds(targetAtlas);
+    if (!bounds) return;
 
-    world.scale.set(1);
-    world.x = canvasRef.current.clientWidth / 2;
-    world.y = canvasRef.current.clientHeight / 2;
+    const viewWidth = canvasRef.current.clientWidth;
+    const viewHeight = canvasRef.current.clientHeight;
+    const padding = 32;
+    const contentWidth = Math.max(bounds.xMax - bounds.xMin, 1);
+    const contentHeight = Math.max(bounds.yMax - bounds.yMin, 1);
+    const fitScale = Math.min(
+      (viewWidth - padding * 2) / contentWidth,
+      (viewHeight - padding * 2) / contentHeight,
+    );
+    const scale = clamp(fitScale, 0.35, 2.6);
+    const centerX = (bounds.xMin + bounds.xMax) / 2;
+    const centerY = (bounds.yMin + bounds.yMax) / 2;
+
+    world.scale.set(scale);
+    world.x = viewWidth / 2 - centerX * scale;
+    world.y = viewHeight / 2 - centerY * scale;
   }
 
   async function runGeneration() {
@@ -86,7 +130,7 @@ export default function App() {
 
       setAtlas(payload);
       setSelectedNodeId(null);
-      requestAnimationFrame(() => resetCamera());
+      requestAnimationFrame(() => fitCameraToAtlas(payload));
     } catch (requestError) {
       setAtlas(null);
       setError(requestError.message || "Failed to generate atlas");
@@ -106,6 +150,8 @@ export default function App() {
         background: "#0f1226",
         resizeTo: canvasRef.current,
         antialias: true,
+        resolution: window.devicePixelRatio || 1,
+        autoDensity: true,
       });
 
       if (isDisposed || !canvasRef.current) return;
@@ -116,7 +162,6 @@ export default function App() {
       const world = new Container();
       worldRef.current = world;
       app.stage.addChild(world);
-      resetCamera();
 
       app.stage.eventMode = "static";
       app.stage.hitArea = app.screen;
@@ -204,20 +249,23 @@ export default function App() {
         .fill({ color: 0x2d4f77, alpha: 0.15 })
         .stroke({ color: 0x5a84b0, alpha: 0.55, width: 1 });
 
-      region.x = cluster.centerX;
-      region.y = cluster.centerY;
+      region.x = Math.round(cluster.centerX);
+      region.y = Math.round(cluster.centerY);
       world.addChild(region);
 
       const clusterLabel = new Text({
         text: `${cluster.label} (${cluster.nodeCount})`,
         style: {
           fill: 0xd9e9ff,
-          fontSize: 11,
+          fontSize: 13,
+          fontWeight: "600",
           fontFamily: "monospace",
         },
       });
-      clusterLabel.x = cluster.centerX - cluster.radius + 8;
-      clusterLabel.y = cluster.centerY - cluster.radius - 18;
+      clusterLabel.resolution = appRef.current?.renderer.resolution ?? window.devicePixelRatio ?? 1;
+      clusterLabel.roundPixels = true;
+      clusterLabel.x = Math.round(cluster.centerX - cluster.radius + 8);
+      clusterLabel.y = Math.round(cluster.centerY - cluster.radius - 20);
       world.addChild(clusterLabel);
     });
 
@@ -229,8 +277,8 @@ export default function App() {
         .fill(fillColor)
         .stroke({ color: 0x0d1528, width: 2, alpha: 0.9 });
 
-      nodeGraphic.x = node.x;
-      nodeGraphic.y = node.y;
+      nodeGraphic.x = Math.round(node.x);
+      nodeGraphic.y = Math.round(node.y);
       nodeGraphic.eventMode = "static";
       nodeGraphic.cursor = "pointer";
       nodeGraphic.on("pointertap", () => {
@@ -267,6 +315,14 @@ export default function App() {
         </label>
         <button type="button" onClick={runGeneration} disabled={isGenerating}>
           {isGenerating ? "Generating..." : "Generate Atlas"}
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={() => fitCameraToAtlas(atlas)}
+          disabled={!atlas}
+        >
+          Fit View
         </button>
       </section>
 

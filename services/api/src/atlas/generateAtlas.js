@@ -184,19 +184,20 @@ export function generateAtlasSnapshot({ fragments, seed, clusterMode }) {
   const clusters = [];
   const nodes = [];
   const totalClusters = Math.max(clusterGroups.length, 1);
-  const baseRadius = 240;
+  const layoutRadiusX = 270;
+  const layoutRadiusY = 165;
 
   clusterGroups.forEach((cluster, clusterIndex) => {
     const angle = (Math.PI * 2 * clusterIndex) / totalClusters;
-    const centerX = Math.cos(angle) * baseRadius;
-    const centerY = Math.sin(angle) * baseRadius;
+    const centerX = Math.cos(angle) * layoutRadiusX;
+    const centerY = Math.sin(angle) * layoutRadiusY;
     const sortedFragments = [...cluster.fragments].sort((a, b) => a.id.localeCompare(b.id));
 
     sortedFragments.forEach((fragment, fragmentIndex) => {
       const localAngle = ((Math.PI * 2) / Math.max(sortedFragments.length, 1)) * fragmentIndex;
-      const localRadius = 35 + rng() * 70;
-      const jitterX = (rng() - 0.5) * 20;
-      const jitterY = (rng() - 0.5) * 20;
+      const localRadius = 28 + rng() * 56;
+      const jitterX = (rng() - 0.5) * 18;
+      const jitterY = (rng() - 0.5) * 14;
       const x = centerX + Math.cos(localAngle) * localRadius + jitterX;
       const y = centerY + Math.sin(localAngle) * localRadius + jitterY;
 
@@ -216,7 +217,7 @@ export function generateAtlasSnapshot({ fragments, seed, clusterMode }) {
       reason: cluster.reason,
       centerX: Number(centerX.toFixed(2)),
       centerY: Number(centerY.toFixed(2)),
-      radius: 95 + sortedFragments.length * 4,
+      radius: 78 + sortedFragments.length * 3,
       nodeCount: sortedFragments.length,
     });
   });
@@ -229,6 +230,11 @@ export function generateAtlasSnapshot({ fragments, seed, clusterMode }) {
     fragments: normalized,
     clusters,
     nodes,
+    layout: {
+      shape: "ellipse",
+      radiusX: layoutRadiusX,
+      radiusY: layoutRadiusY,
+    },
     uiState: {
       selectedNodeId: null,
       zoom: 1,
