@@ -35,3 +35,4 @@ Notes:
 - API perf payload now uses high-resolution timing (`performance.now`) with phase metrics (`normalizeMs`, `clusterMs`, `layoutMs`) and request/save/load timings (`requestMs`, `saveMs`, `loadMs`) from commit `9c9a704`.
 - Frontend run summary now includes live render telemetry (`current/avg FPS`, `p95 frame ms`) for in-session observability (commit `51764e7`).
 - Frontend now supports one-click telemetry export (`Export Telemetry`) to JSON for evidence persistence during sign-off walkthroughs (commit `a7d861e`).
+- Latest exported walkthrough artifacts: `docs/02-poc/evidence/telemetry-exports/perf-snapshot-theme-2026-02-22T21-52-59Z.json` and `docs/02-poc/evidence/telemetry-exports/perf-snapshot-intensity-2026-02-22T21-53-28Z.json`.

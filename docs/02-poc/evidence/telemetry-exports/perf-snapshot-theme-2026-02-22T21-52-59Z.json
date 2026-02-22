@@ -1,0 +1,39 @@
+{
+  "capturedAt": "2026-02-22T21:52:59.755Z",
+  "atlas": {
+    "id": "atlas-85a18bd7",
+    "seed": "spike-seed-01",
+    "clusterMode": "theme",
+    "nodeCount": 50,
+    "clusterCount": 8,
+    "layout": {
+      "shape": "ellipse",
+      "radiusX": 270,
+      "radiusY": 165
+    }
+  },
+  "apiPerf": {
+    "generationMs": 4.03,
+    "phases": {
+      "normalizeMs": 0.119,
+      "clusterMs": 1.824,
+      "layoutMs": 2.068
+    },
+    "timingSource": "performance.now",
+    "requestMs": 4.147
+  },
+  "renderPerf": {
+    "fpsCurrent": 15.4,
+    "fpsAverage": 13.9,
+    "p95FrameMs": 82.3,
+    "sampleCount": 240
+  },
+  "camera": {
+    "zoom": 0.8207,
+    "panX": 532,
+    "panY": 276.57
+  },
+  "selection": {
+    "selectedNodeId": null
+  }
+}

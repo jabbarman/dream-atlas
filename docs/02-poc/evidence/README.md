@@ -5,3 +5,5 @@
 - `poc-demo-flow.gif`: Short demo flow showing mode switch, save/load roundtrip, and selection state transitions.
 - `demo-frames/`: Source frame sequence used to produce `poc-demo-flow.gif`.
 - Runtime telemetry export: use `Export Telemetry` in the POC UI to download a JSON snapshot (API + render + camera metrics) during sign-off walkthroughs.
+- `telemetry-exports/`: exported sign-off telemetry payloads for theme and intensity walkthrough runs.
+- `../16-SIGNOFF-WALKTHROUGH-2026-02-22.md`: facilitator record of the final sign-off walkthrough and outcomes.

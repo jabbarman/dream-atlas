@@ -21,6 +21,7 @@ Status: Executed; formal sign-off pending
 ## Evidence artifacts
 - Demo: `docs/02-poc/evidence/` (GIF + screenshot available)
 - Perf snapshot: `docs/02-poc/09-PERFORMANCE-BUDGETS.md`
+- Sign-off walkthrough: `docs/02-poc/16-SIGNOFF-WALKTHROUGH-2026-02-22.md`
 - QA results: `docs/02-poc/12-QA-TEST-MATRIX.md`
 - Defects: `docs/02-poc/13-DEFECT-LOG.md`
 - Sign-off record: `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`

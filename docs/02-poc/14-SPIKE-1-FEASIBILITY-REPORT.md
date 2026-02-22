@@ -25,6 +25,7 @@ Implemented in this spike:
 - QA results: `docs/02-poc/12-QA-TEST-MATRIX.md`
 - Perf budgets + latest snapshot: `docs/02-poc/09-PERFORMANCE-BUDGETS.md`
 - Perf evidence note: `docs/02-poc/evidence/perf-snapshot-2026-02-22.md`
+- Sign-off walkthrough record: `docs/02-poc/16-SIGNOFF-WALKTHROUGH-2026-02-22.md`
 - Defect state: `docs/02-poc/13-DEFECT-LOG.md`
 - UI capture: `docs/02-poc/evidence/poc-ui-stage-qa.png`
 
