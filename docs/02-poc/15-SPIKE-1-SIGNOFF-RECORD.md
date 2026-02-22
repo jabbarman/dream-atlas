@@ -8,6 +8,7 @@ Status: Walkthrough completed; awaiting role approvals
 
 - Feasibility report: `docs/02-poc/14-SPIKE-1-FEASIBILITY-REPORT.md`
 - Acceptance checklist: `docs/02-poc/03-SPIKE-1-ACCEPTANCE.md`
+- POC gate checklist: `docs/phase-gates/POC-GATE-CHECKLIST.md`
 - QA matrix: `docs/02-poc/12-QA-TEST-MATRIX.md`
 - Perf snapshot: `docs/02-poc/evidence/perf-snapshot-2026-02-22.md`
 - Telemetry exports: `docs/02-poc/evidence/telemetry-exports/`

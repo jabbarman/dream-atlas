@@ -53,4 +53,6 @@ For implementation status and project governance:
 2. `docs/status/LIVE-STATUS.md`
 3. `docs/02-poc/10-IMPLEMENTATION-CHECKLIST.md`
 4. `docs/02-poc/12-QA-TEST-MATRIX.md`
-5. `docs/ops/CODEX-CLI-WORKFLOW.md`
+5. `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`
+6. `docs/03-mvp/01-MVP-SCOPE.md`
+7. `docs/03-mvp/02-MVP-IMPLEMENTATION-PLAN.md`
