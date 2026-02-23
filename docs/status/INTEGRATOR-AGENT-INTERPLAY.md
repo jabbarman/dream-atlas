@@ -117,3 +117,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: API restart smoke (`generate -> list -> save -> restart -> load -> list`) + browser snapshot proving picker-based load transition.
 - Outcome: Slice 1 is marked PASS with evidence, and execution can move to MVP Slice 2 ingestion work.
+
+### Stage: MVP Slice 2 ingestion implementation + QA
+- Date (UTC): 2026-02-23T20:24:28Z
+- Integrator role: implemented manual fragment entry and JSON paste/import ingestion controls, switched generation to active fragment source, and added actionable parse/validation error handling in the UI.
+- Delegated agent role: none (single-session implementation).
+- Validation: `npm run build:web`; browser walkthrough proving manual-add -> custom-generate flow and invalid JSON error messaging.
+- Outcome: Slice 2 is marked PASS with committed evidence; next stage is Slice 3 discovery utilities (search/filter/related-node highlighting).

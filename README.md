@@ -18,6 +18,7 @@ This project is a creative and exploratory tool. It is not a clinical or diagnos
 - Cluster modes: `theme` and `intensity`.
 - PixiJS map rendering with pan/zoom/select interaction.
 - API + UI snapshot persistence flow with saved-atlas picker, generate/save/load, and telemetry export.
+- MVP Slice 2 ingestion flow: manual fragment entry and JSON paste/import for custom generation.
 
 ## Architecture (current)
 
@@ -58,3 +59,4 @@ For implementation status and project governance:
 6. `docs/03-mvp/01-MVP-SCOPE.md`
 7. `docs/03-mvp/02-MVP-IMPLEMENTATION-PLAN.md`
 8. `docs/03-mvp/05-SLICE-1-QA-REPORT.md`
+9. `docs/03-mvp/06-SLICE-2-QA-REPORT.md`

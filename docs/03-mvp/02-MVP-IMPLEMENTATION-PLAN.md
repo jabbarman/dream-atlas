@@ -1,7 +1,7 @@
 # MVP Implementation Plan (Draft v1)
 
 Date (UTC): 2026-02-22  
-Phase: MVP-prep  
+Phase: MVP  
 Owner: Tech Lead
 
 ## Current execution update (2026-02-22)
@@ -16,8 +16,15 @@ Owner: Tech Lead
 - Slice 1 QA evidence pass completed:
   - report: `docs/03-mvp/05-SLICE-1-QA-REPORT.md`
   - evidence: API smoke JSON + picker-load screenshot
+- Slice 2 user-data ingestion implemented in commit `7d46144`:
+  - manual fragment entry form
+  - JSON paste/import loading path
+  - generation against active custom fragment set with actionable parse errors
+- Slice 2 QA evidence pass completed:
+  - report: `docs/03-mvp/06-SLICE-2-QA-REPORT.md`
+  - evidence: ingestion UI screenshot
 - Next focus:
-  - start Slice 2 user-data ingestion
+  - start Slice 3 discovery utility
 
 ## Execution slices
 

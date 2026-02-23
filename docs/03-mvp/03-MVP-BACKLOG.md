@@ -1,7 +1,7 @@
 # MVP Backlog (Draft v1)
 
 Date (UTC): 2026-02-22  
-Phase: MVP-prep  
+Phase: MVP  
 Source: Discovery opportunities + completed POC evidence
 
 ## Execution update (2026-02-22)
@@ -11,9 +11,13 @@ Source: Discovery opportunities + completed POC evidence
   - MVP-02 (Atlas listing API endpoint + frontend picker integration)
   - MVP-03 (Snapshot `schemaVersion` support + versioning notes)
   - MVP Slice 1 QA evidence pass (`docs/03-mvp/05-SLICE-1-QA-REPORT.md`)
-- Next in sequence:
   - MVP-04 (Manual fragment entry form)
   - MVP-05 (JSON paste/import flow)
+  - MVP Slice 2 QA evidence pass (`docs/03-mvp/06-SLICE-2-QA-REPORT.md`)
+- Next in sequence:
+  - MVP-06 (Search by text/tag)
+  - MVP-07 (Filters by intensity/time bucket)
+  - MVP-08 (Related-node highlighting)
 
 | ID | Item | Priority | Owner | Depends on | Done when |
 |---|---|---|---|---|---|
