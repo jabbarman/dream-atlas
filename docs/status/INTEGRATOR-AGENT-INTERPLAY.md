@@ -145,3 +145,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: `npm run build:web`; copy artifact review (`docs/03-mvp/11-MVP-COPY-PRIVACY-PASS.md`) and risk register status update checks.
 - Outcome: MVP-12 is marked PASS; project is now awaiting final release sign-off confirmation.
+
+### Stage: Final sign-off + release publication
+- Date (UTC): 2026-02-23T23:23:31Z
+- Integrator role: recorded final release approval, created and pushed tag `v0.1.0`, and published official GitHub release notes for the MVP package.
+- Delegated agent role: none (single-session implementation).
+- Validation: tag push confirmed (`v0.1.0`); GitHub Releases API response confirmed published release URL.
+- Outcome: Dream Atlas MVP `v0.1.0` is officially released; next stage is post-release monitoring and defect triage.

@@ -1,6 +1,6 @@
 # MVP Release Checklist
 
-Date (UTC): 2026-02-23T23:10:50Z  
+Date (UTC): 2026-02-23T23:23:31Z  
 Owner: PM + Tech Lead + QA
 
 ## Release readiness checklist
@@ -32,4 +32,5 @@ If Slice 4 changes need rollback:
 ## Current decision
 
 Technical readiness: **GO**  
-Release sign-off readiness: **GO** (awaiting final approver confirmation).
+Release sign-off readiness: **APPROVED** (final sign-off confirmed).  
+Release published: **v0.1.0** (`https://github.com/jabbarman/dream-atlas/releases/tag/v0.1.0`).
