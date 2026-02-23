@@ -176,6 +176,58 @@ p {
   font-size: 0.84rem;
 }
 
+.discovery-panel {
+  margin-bottom: 14px;
+  border: 1px solid #1f2845;
+  border-radius: 12px;
+  background: #0a1022;
+  padding: 12px;
+}
+
+.discovery-panel h2 {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+}
+
+.discovery-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 2fr) repeat(2, minmax(140px, 1fr)) auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.discovery-grid label {
+  display: grid;
+  gap: 4px;
+  color: #c8ddff;
+  font-size: 0.85rem;
+}
+
+.discovery-grid input,
+.discovery-grid select {
+  border: 1px solid #2e426f;
+  border-radius: 8px;
+  background: #0f1730;
+  color: #d9e8ff;
+  padding: 8px 10px;
+}
+
+.discovery-grid button {
+  border: 1px solid #2a4c7a;
+  border-radius: 8px;
+  background: #13345f;
+  color: #eaf2ff;
+  font-weight: 600;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.discovery-hint {
+  margin: 10px 0 0;
+  color: #b4c8ea;
+  font-size: 0.84rem;
+}
+
 .workspace {
   display: grid;
   gap: 14px;
@@ -230,6 +282,10 @@ p {
 
 @media (max-width: 980px) {
   .ingest-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .discovery-grid {
     grid-template-columns: 1fr;
   }
 

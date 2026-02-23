@@ -153,6 +153,9 @@ export default function App() {
   const [customFragments, setCustomFragments] = useState([]);
   const [fragmentJsonInput, setFragmentJsonInput] = useState("");
   const [manualFragment, setManualFragment] = useState(EMPTY_MANUAL_FRAGMENT);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [intensityFilter, setIntensityFilter] = useState("all");
+  const [timeBucketFilter, setTimeBucketFilter] = useState("all");
   const [renderPerf, setRenderPerf] = useState({
     fpsCurrent: null,
     fpsAverage: null,
@@ -175,6 +178,89 @@ export default function App() {
     return atlas.fragments.find((fragment) => fragment.id === selectedNode.fragmentId) ?? null;
   }, [atlas, selectedNode]);
 
+  const fragmentById = useMemo(() => {
+    if (!atlas) return new Map();
+    return new Map(atlas.fragments.map((fragment) => [fragment.id, fragment]));
+  }, [atlas]);
+
+  const timeBucketOptions = useMemo(() => {
+    if (!atlas) return [];
+    return [...new Set(atlas.fragments.map((fragment) => fragment.timestamp_bucket))].sort((a, b) =>
+      a.localeCompare(b),
+    );
+  }, [atlas]);
+
+  const intensityOptions = useMemo(() => {
+    if (!atlas) return [];
+    return [...new Set(atlas.fragments.map((fragment) => String(fragment.intensity)))].sort((a, b) =>
+      Number(a) - Number(b),
+    );
+  }, [atlas]);
+
+  const visibleNodeIds = useMemo(() => {
+    if (!atlas) return new Set();
+    const query = searchQuery.trim().toLowerCase();
+    const selectedNodeIdSet = selectedNodeId ? new Set([selectedNodeId]) : new Set();
+
+    const matches = (fragment, node) => {
+      if (!fragment) return false;
+
+      if (intensityFilter !== "all" && String(fragment.intensity) !== intensityFilter) {
+        return false;
+      }
+      if (timeBucketFilter !== "all" && fragment.timestamp_bucket !== timeBucketFilter) {
+        return false;
+      }
+      if (!query) return true;
+
+      const tagText = (fragment.theme_tags ?? []).join(" ");
+      const haystack = `${fragment.id} ${fragment.text} ${tagText} ${node.clusterId}`.toLowerCase();
+      return haystack.includes(query);
+    };
+
+    const ids = atlas.nodes
+      .filter((node) => matches(fragmentById.get(node.fragmentId), node))
+      .map((node) => node.id);
+    const visible = new Set(ids);
+
+    // Keep selected context visible so related highlighting can be inspected.
+    selectedNodeIdSet.forEach((id) => visible.add(id));
+    return visible;
+  }, [atlas, fragmentById, intensityFilter, searchQuery, selectedNodeId, timeBucketFilter]);
+
+  const relatedNodeIds = useMemo(() => {
+    if (!atlas || !selectedFragment) return new Set();
+    const selectedTags = new Set(selectedFragment.theme_tags ?? []);
+    const related = atlas.nodes
+      .filter((node) => {
+        if (node.id === selectedNodeId) return false;
+        const fragment = fragmentById.get(node.fragmentId);
+        if (!fragment) return false;
+        return (fragment.theme_tags ?? []).some((tag) => selectedTags.has(tag));
+      })
+      .map((node) => node.id);
+    return new Set(related);
+  }, [atlas, fragmentById, selectedFragment, selectedNodeId]);
+
+  const visibleNodeCount = useMemo(() => visibleNodeIds.size, [visibleNodeIds]);
+
+  const visibleClusterCount = useMemo(() => {
+    if (!atlas) return 0;
+    const clusterIds = new Set(
+      atlas.nodes.filter((node) => visibleNodeIds.has(node.id)).map((node) => node.clusterId),
+    );
+    return clusterIds.size;
+  }, [atlas, visibleNodeIds]);
+
+  const relatedVisibleNodeCount = useMemo(() => {
+    if (!atlas) return 0;
+    return atlas.nodes.reduce((count, node) => {
+      if (!visibleNodeIds.has(node.id)) return count;
+      if (!relatedNodeIds.has(node.id)) return count;
+      return count + 1;
+    }, 0);
+  }, [atlas, relatedNodeIds, visibleNodeIds]);
+
   const layoutSignature = useMemo(() => {
     if (!atlas) return "";
     return createLayoutSignature(atlas.nodes);
@@ -182,6 +268,12 @@ export default function App() {
 
   const clusterSummary = useMemo(() => {
     if (!atlas) return [];
+    const visibleCounts = new Map();
+    atlas.nodes.forEach((node) => {
+      if (!visibleNodeIds.has(node.id)) return;
+      visibleCounts.set(node.clusterId, (visibleCounts.get(node.clusterId) ?? 0) + 1);
+    });
+
     return [...atlas.clusters]
       .sort((a, b) => a.id.localeCompare(b.id))
       .map((cluster) => ({
@@ -189,8 +281,9 @@ export default function App() {
         label: cluster.label,
         reason: cluster.reason,
         nodeCount: cluster.nodeCount,
+        visibleNodeCount: visibleCounts.get(cluster.id) ?? 0,
       }));
-  }, [atlas]);
+  }, [atlas, visibleNodeIds]);
 
   function getCameraState() {
     const world = worldRef.current;
@@ -216,6 +309,13 @@ export default function App() {
   function clearSelection() {
     setSelectedNodeId(null);
     setStatusMessage("Selection cleared.");
+  }
+
+  function clearDiscoveryFilters() {
+    setSearchQuery("");
+    setIntensityFilter("all");
+    setTimeBucketFilter("all");
+    setStatusMessage("Discovery filters cleared.");
   }
 
   function applyCameraState(uiState, fallbackAtlas) {
@@ -682,19 +782,29 @@ export default function App() {
     if (!atlas) return;
 
     const clusterById = new Map(atlas.clusters.map((cluster) => [cluster.id, cluster]));
+    const visibleClusters = new Set(
+      atlas.nodes.filter((node) => visibleNodeIds.has(node.id)).map((node) => node.clusterId),
+    );
+    const visibleNodeCounts = new Map();
+    atlas.nodes.forEach((node) => {
+      if (!visibleNodeIds.has(node.id)) return;
+      visibleNodeCounts.set(node.clusterId, (visibleNodeCounts.get(node.clusterId) ?? 0) + 1);
+    });
 
     atlas.clusters.forEach((cluster) => {
+      const isClusterVisible = visibleClusters.has(cluster.id);
+      const visibleNodeCount = visibleNodeCounts.get(cluster.id) ?? 0;
       const region = new Graphics()
         .circle(0, 0, cluster.radius)
-        .fill({ color: 0x2d4f77, alpha: 0.15 })
-        .stroke({ color: 0x5a84b0, alpha: 0.55, width: 1 });
+        .fill({ color: 0x2d4f77, alpha: isClusterVisible ? 0.18 : 0.05 })
+        .stroke({ color: 0x5a84b0, alpha: isClusterVisible ? 0.65 : 0.2, width: 1 });
 
       region.x = Math.round(cluster.centerX);
       region.y = Math.round(cluster.centerY);
       world.addChild(region);
 
       const clusterLabel = new Text({
-        text: `${cluster.label} (${cluster.nodeCount})`,
+        text: `${cluster.label} (${visibleNodeCount}/${cluster.nodeCount})`,
         style: {
           fill: 0xd9e9ff,
           fontSize: 13,
@@ -706,30 +816,40 @@ export default function App() {
       clusterLabel.roundPixels = true;
       clusterLabel.x = Math.round(cluster.centerX - cluster.radius + 8);
       clusterLabel.y = Math.round(cluster.centerY - cluster.radius - 20);
+      clusterLabel.alpha = isClusterVisible ? 1 : 0.4;
       world.addChild(clusterLabel);
     });
 
     atlas.nodes.forEach((node) => {
+      const isVisible = visibleNodeIds.has(node.id);
       const isSelected = node.id === selectedNodeId;
+      const isRelated = relatedNodeIds.has(node.id);
       const fillColor = getIntensityColor(node.intensity);
       const nodeGraphic = new Graphics()
-        .circle(0, 0, isSelected ? 10 : 8)
+        .circle(0, 0, isSelected ? 10 : isRelated ? 9 : 8)
         .fill(fillColor)
-        .stroke({ color: 0x0d1528, width: 2, alpha: 0.9 });
+        .stroke({
+          color: isSelected ? 0xe8f1ff : isRelated ? 0x8ce99a : 0x0d1528,
+          width: isSelected || isRelated ? 2.4 : 2,
+          alpha: isVisible ? 0.95 : 0.5,
+        });
 
       nodeGraphic.x = Math.round(node.x);
       nodeGraphic.y = Math.round(node.y);
-      nodeGraphic.eventMode = "static";
-      nodeGraphic.cursor = "pointer";
-      nodeGraphic.on("pointertap", () => {
-        handleSelectNode(node.id);
-      });
+      nodeGraphic.alpha = isVisible ? 1 : 0.18;
+      nodeGraphic.eventMode = isVisible ? "static" : "none";
+      if (isVisible) {
+        nodeGraphic.cursor = "pointer";
+        nodeGraphic.on("pointertap", () => {
+          handleSelectNode(node.id);
+        });
+      }
 
       const cluster = clusterById.get(node.clusterId);
       nodeGraphic.label = `${node.id} | ${cluster?.label ?? "unknown"}`;
       world.addChild(nodeGraphic);
     });
-  }, [atlas, selectedNodeId]);
+  }, [atlas, relatedNodeIds, selectedNodeId, visibleNodeIds]);
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
@@ -984,6 +1104,59 @@ export default function App() {
         </div>
       </section>
 
+      <section className="discovery-panel">
+        <h2>Atlas Discovery (MVP Slice 3)</h2>
+        <div className="discovery-grid">
+          <label htmlFor="atlas-search">
+            Search
+            <input
+              id="atlas-search"
+              placeholder="id, text, tag, cluster..."
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+            />
+          </label>
+          <label htmlFor="intensity-filter">
+            Intensity
+            <select
+              id="intensity-filter"
+              value={intensityFilter}
+              onChange={(event) => setIntensityFilter(event.target.value)}
+            >
+              <option value="all">all intensities</option>
+              {intensityOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label htmlFor="time-bucket-filter">
+            Time bucket
+            <select
+              id="time-bucket-filter"
+              value={timeBucketFilter}
+              onChange={(event) => setTimeBucketFilter(event.target.value)}
+            >
+              <option value="all">all buckets</option>
+              {timeBucketOptions.map((bucket) => (
+                <option key={bucket} value={bucket}>
+                  {bucket}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button type="button" className="secondary" onClick={clearDiscoveryFilters}>
+            Clear Filters
+          </button>
+        </div>
+        <p className="discovery-hint">
+          Visible nodes: <strong>{visibleNodeCount}</strong> / {atlas?.nodeCount ?? 0} | Visible clusters:{" "}
+          <strong>{visibleClusterCount}</strong> / {atlas?.clusters.length ?? 0} | Related highlights:{" "}
+          <strong>{relatedVisibleNodeCount}</strong>
+        </p>
+      </section>
+
       {error ? <p className="error">{error}</p> : null}
       {statusMessage ? <p className="status">{statusMessage}</p> : null}
 
@@ -995,7 +1168,9 @@ export default function App() {
             <li>Snapshot: {atlas?.id ?? "-"}</li>
             <li>Fragments: {activeFragments.length}</li>
             <li>Nodes: {atlas?.nodeCount ?? 0}</li>
+            <li>Visible nodes: {visibleNodeCount}</li>
             <li>Clusters: {atlas?.clusters.length ?? 0}</li>
+            <li>Visible clusters: {visibleClusterCount}</li>
             <li>Mode: {atlas?.clusterMode ?? "-"}</li>
             <li>Layout: {atlas?.layout?.shape ?? "-"}</li>
             <li>Generation: {atlas?.perf?.generationMs ?? "-"} ms</li>
@@ -1011,7 +1186,7 @@ export default function App() {
             <ul>
               {clusterSummary.map((cluster) => (
                 <li key={cluster.id}>
-                  {cluster.label} ({cluster.nodeCount}): {cluster.reason}
+                  {cluster.label} ({cluster.visibleNodeCount}/{cluster.nodeCount}): {cluster.reason}
                 </li>
               ))}
             </ul>
