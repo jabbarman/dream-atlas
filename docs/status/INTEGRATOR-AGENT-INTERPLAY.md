@@ -138,3 +138,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: `npm run build:web`; API roundtrip evidence (`mvp-slice4-export-import-roundtrip.json`); API malformed-import validation (`mvp-slice4-import-validation.json`); DevTools UI evidence screenshot.
 - Outcome: Slice 4 is marked PASS with release-readiness packet complete; next stage is MVP-12 copy/privacy pass for final sign-off.
+
+### Stage: MVP-12 privacy/non-clinical copy pass
+- Date (UTC): 2026-02-23T23:10:50Z
+- Integrator role: added explicit non-clinical and privacy boundary copy in the UI and README, updated release checklist to close MVP-12 blocker, and marked relevant discovery risks as mitigated.
+- Delegated agent role: none (single-session implementation).
+- Validation: `npm run build:web`; copy artifact review (`docs/03-mvp/11-MVP-COPY-PRIVACY-PASS.md`) and risk register status update checks.
+- Outcome: MVP-12 is marked PASS; project is now awaiting final release sign-off confirmation.
