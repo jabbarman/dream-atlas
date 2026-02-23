@@ -5,9 +5,71 @@ import { SAMPLE_FRAGMENTS } from "./data/sampleFragments";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8787";
 const FPS_SAMPLE_LIMIT = 240;
 const FPS_UPDATE_INTERVAL_MS = 500;
+const EMPTY_MANUAL_FRAGMENT = {
+  id: "",
+  text: "",
+  tags: "",
+  intensity: "3",
+  timestamp_bucket: "day",
+  source_type: "note",
+};
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
+}
+
+function parseTagString(value) {
+  if (typeof value !== "string") return [];
+  return value
+    .split(",")
+    .map((part) => part.trim().toLowerCase())
+    .filter((part) => part.length > 0);
+}
+
+function normalizeFragmentInput(raw, index) {
+  const id =
+    typeof raw?.id === "string" && raw.id.trim().length > 0
+      ? raw.id.trim()
+      : `fragment-${String(index + 1).padStart(3, "0")}`;
+  const text =
+    typeof raw?.text === "string" && raw.text.trim().length > 0
+      ? raw.text.trim()
+      : `(fragment ${index + 1})`;
+  const theme_tags = Array.isArray(raw?.theme_tags)
+    ? raw.theme_tags.map((tag) => String(tag).trim().toLowerCase()).filter((tag) => tag.length > 0)
+    : parseTagString(raw?.tags ?? "");
+  const intensity = clamp(Number.parseInt(raw?.intensity ?? 3, 10) || 3, 1, 5);
+
+  return {
+    id,
+    text,
+    theme_tags: theme_tags.length > 0 ? theme_tags : ["uncategorized"],
+    intensity,
+    timestamp_bucket:
+      typeof raw?.timestamp_bucket === "string" && raw.timestamp_bucket.trim().length > 0
+        ? raw.timestamp_bucket.trim()
+        : "unknown",
+    source_type:
+      typeof raw?.source_type === "string" && raw.source_type.trim().length > 0
+        ? raw.source_type.trim()
+        : "note",
+  };
+}
+
+function normalizeFragmentCollection(input) {
+  if (!Array.isArray(input) || input.length === 0) return [];
+  return input.map((fragment, index) => normalizeFragmentInput(fragment, index));
+}
+
+function formatApiError(payload, fallbackMessage) {
+  const base = payload?.error || fallbackMessage;
+  if (!Array.isArray(payload?.details) || payload.details.length === 0) return base;
+
+  const detailText = payload.details
+    .slice(0, 4)
+    .map((detail) => `${detail.field}: ${detail.message}`)
+    .join("; ");
+  return `${base}: ${detailText}`;
 }
 
 function getIntensityColor(intensity) {
@@ -87,12 +149,21 @@ export default function App() {
   const [statusMessage, setStatusMessage] = useState("");
   const [snapshotIdInput, setSnapshotIdInput] = useState("");
   const [atlasList, setAtlasList] = useState([]);
+  const [fragmentSource, setFragmentSource] = useState("sample");
+  const [customFragments, setCustomFragments] = useState([]);
+  const [fragmentJsonInput, setFragmentJsonInput] = useState("");
+  const [manualFragment, setManualFragment] = useState(EMPTY_MANUAL_FRAGMENT);
   const [renderPerf, setRenderPerf] = useState({
     fpsCurrent: null,
     fpsAverage: null,
     p95FrameMs: null,
     sampleCount: 0,
   });
+
+  const activeFragments = useMemo(
+    () => (fragmentSource === "custom" ? customFragments : SAMPLE_FRAGMENTS),
+    [fragmentSource, customFragments],
+  );
 
   const selectedNode = useMemo(
     () => atlas?.nodes.find((node) => node.id === selectedNodeId) ?? null,
@@ -222,17 +293,102 @@ export default function App() {
     }
   }
 
+  function useSampleFragments() {
+    setFragmentSource("sample");
+    setStatusMessage(`Using sample dataset (${SAMPLE_FRAGMENTS.length} fragments).`);
+    setError("");
+  }
+
+  function clearCustomFragments() {
+    setFragmentSource("custom");
+    setCustomFragments([]);
+    setFragmentJsonInput("");
+    setStatusMessage("Cleared custom fragment set.");
+    setError("");
+  }
+
+  function loadFragmentsFromJson() {
+    setError("");
+    setStatusMessage("");
+    try {
+      const parsed = JSON.parse(fragmentJsonInput);
+      const inputFragments = Array.isArray(parsed) ? parsed : parsed?.fragments;
+      const normalized = normalizeFragmentCollection(inputFragments);
+      if (normalized.length === 0) {
+        throw new Error("JSON must be an array of fragments or an object with a non-empty fragments array.");
+      }
+
+      setCustomFragments(normalized);
+      setFragmentSource("custom");
+      setFragmentJsonInput(JSON.stringify(normalized, null, 2));
+      setStatusMessage(`Loaded ${normalized.length} custom fragments from JSON.`);
+    } catch (parseError) {
+      setError(parseError.message || "Failed to parse fragment JSON.");
+    }
+  }
+
+  function addManualFragment() {
+    setError("");
+    setStatusMessage("");
+
+    const tags = parseTagString(manualFragment.tags);
+    if (!manualFragment.id.trim()) {
+      setError("Manual fragment requires an id.");
+      return;
+    }
+    if (!manualFragment.text.trim()) {
+      setError("Manual fragment requires text.");
+      return;
+    }
+    if (tags.length === 0) {
+      setError("Manual fragment requires at least one theme tag.");
+      return;
+    }
+
+    const normalized = normalizeFragmentInput(
+      {
+        id: manualFragment.id,
+        text: manualFragment.text,
+        theme_tags: tags,
+        intensity: manualFragment.intensity,
+        timestamp_bucket: manualFragment.timestamp_bucket,
+        source_type: manualFragment.source_type,
+      },
+      customFragments.length,
+    );
+
+    const nextFragments = [...customFragments.filter((item) => item.id !== normalized.id), normalized];
+    setCustomFragments(nextFragments);
+    setFragmentSource("custom");
+    setFragmentJsonInput(JSON.stringify(nextFragments, null, 2));
+    setManualFragment(EMPTY_MANUAL_FRAGMENT);
+    setStatusMessage(`Added manual fragment "${normalized.id}" (${nextFragments.length} total).`);
+  }
+
+  function removeCustomFragment(fragmentId) {
+    const nextFragments = customFragments.filter((fragment) => fragment.id !== fragmentId);
+    setCustomFragments(nextFragments);
+    setFragmentJsonInput(nextFragments.length > 0 ? JSON.stringify(nextFragments, null, 2) : "");
+    setStatusMessage(`Removed fragment "${fragmentId}".`);
+  }
+
   async function runGeneration() {
     setIsGenerating(true);
     setError("");
     setStatusMessage("");
+
+    if (activeFragments.length === 0) {
+      setError("No fragments available. Add manual fragments, load JSON, or switch back to sample data.");
+      setIsGenerating(false);
+      return;
+    }
 
     try {
       const response = await fetch(`${API_BASE_URL}/atlas/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          fragments: SAMPLE_FRAGMENTS,
+          fragments: activeFragments,
           seed,
           clusterMode,
         }),
@@ -240,13 +396,15 @@ export default function App() {
 
       const payload = await response.json();
       if (!response.ok) {
-        throw new Error(payload.error || "Failed to generate atlas");
+        throw new Error(formatApiError(payload, "Failed to generate atlas"));
       }
 
       setAtlas(payload);
       setSelectedNodeId(null);
       setSnapshotIdInput(payload.id ?? "");
-      setStatusMessage(`Generated ${payload.nodeCount} nodes in ${payload.perf?.generationMs ?? "?"}ms.`);
+      setStatusMessage(
+        `Generated ${payload.nodeCount} nodes from ${activeFragments.length} fragments in ${payload.perf?.generationMs ?? "?"}ms.`,
+      );
       requestAnimationFrame(() => fitCameraToAtlas(payload));
       refreshAtlasList({ preferredSnapshotId: payload.id, silent: true });
     } catch (requestError) {
@@ -590,6 +748,7 @@ export default function App() {
         return true;
       },
       getRenderPerf: () => renderPerf,
+      getActiveFragments: () => activeFragments,
       exportPerfSnapshot: () => {
         exportPerfSnapshot();
         return true;
@@ -599,7 +758,7 @@ export default function App() {
     return () => {
       delete window.__dreamAtlasDebug;
     };
-  }, [atlas, selectedNodeId, renderPerf]);
+  }, [atlas, selectedNodeId, renderPerf, activeFragments]);
 
   return (
     <div className="page">
@@ -704,6 +863,127 @@ export default function App() {
         </button>
       </section>
 
+      <section className="ingest-panel">
+        <h2>Fragment Ingestion (MVP Slice 2)</h2>
+        <div className="ingest-grid">
+          <div className="ingest-block">
+            <label htmlFor="fragment-source">
+              Data Source
+              <select
+                id="fragment-source"
+                value={fragmentSource}
+                onChange={(event) => setFragmentSource(event.target.value)}
+              >
+                <option value="sample">sample dataset</option>
+                <option value="custom">custom dataset</option>
+              </select>
+            </label>
+            <div className="ingest-actions">
+              <button type="button" className="secondary" onClick={useSampleFragments}>
+                Use Sample Data
+              </button>
+              <button type="button" className="secondary" onClick={clearCustomFragments}>
+                Clear Custom Data
+              </button>
+            </div>
+            <p className="ingest-hint">
+              Active fragments: <strong>{activeFragments.length}</strong> ({fragmentSource})
+            </p>
+          </div>
+
+          <div className="ingest-block">
+            <h3>Manual Fragment Entry</h3>
+            <div className="manual-grid">
+              <input
+                placeholder="id"
+                value={manualFragment.id}
+                onChange={(event) => setManualFragment((prev) => ({ ...prev, id: event.target.value }))}
+              />
+              <input
+                placeholder="tags (comma separated)"
+                value={manualFragment.tags}
+                onChange={(event) =>
+                  setManualFragment((prev) => ({
+                    ...prev,
+                    tags: event.target.value,
+                  }))
+                }
+              />
+              <input
+                placeholder="time bucket"
+                value={manualFragment.timestamp_bucket}
+                onChange={(event) =>
+                  setManualFragment((prev) => ({
+                    ...prev,
+                    timestamp_bucket: event.target.value,
+                  }))
+                }
+              />
+              <input
+                placeholder="source type"
+                value={manualFragment.source_type}
+                onChange={(event) =>
+                  setManualFragment((prev) => ({
+                    ...prev,
+                    source_type: event.target.value,
+                  }))
+                }
+              />
+              <input
+                placeholder="intensity (1-5)"
+                value={manualFragment.intensity}
+                onChange={(event) =>
+                  setManualFragment((prev) => ({
+                    ...prev,
+                    intensity: event.target.value,
+                  }))
+                }
+              />
+            </div>
+            <textarea
+              rows={3}
+              placeholder="fragment text"
+              value={manualFragment.text}
+              onChange={(event) => setManualFragment((prev) => ({ ...prev, text: event.target.value }))}
+            />
+            <div className="ingest-actions">
+              <button type="button" className="secondary" onClick={addManualFragment}>
+                Add/Update Fragment
+              </button>
+            </div>
+          </div>
+
+          <div className="ingest-block">
+            <h3>JSON Paste/Import</h3>
+            <textarea
+              rows={9}
+              placeholder='Paste fragment array or {"fragments":[...]}'
+              value={fragmentJsonInput}
+              onChange={(event) => setFragmentJsonInput(event.target.value)}
+            />
+            <div className="ingest-actions">
+              <button type="button" className="secondary" onClick={loadFragmentsFromJson}>
+                Load JSON Fragments
+              </button>
+            </div>
+            {customFragments.length > 0 ? (
+              <ul className="fragment-list">
+                {customFragments.slice(0, 6).map((fragment) => (
+                  <li key={fragment.id}>
+                    <span>{fragment.id}</span>
+                    <button type="button" onClick={() => removeCustomFragment(fragment.id)}>
+                      remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="ingest-hint">No custom fragments loaded yet.</p>
+            )}
+          </div>
+        </div>
+      </section>
+
       {error ? <p className="error">{error}</p> : null}
       {statusMessage ? <p className="status">{statusMessage}</p> : null}
 
@@ -713,7 +993,7 @@ export default function App() {
           <h2>Run Summary</h2>
           <ul>
             <li>Snapshot: {atlas?.id ?? "-"}</li>
-            <li>Fragments: {SAMPLE_FRAGMENTS.length}</li>
+            <li>Fragments: {activeFragments.length}</li>
             <li>Nodes: {atlas?.nodeCount ?? 0}</li>
             <li>Clusters: {atlas?.clusters.length ?? 0}</li>
             <li>Mode: {atlas?.clusterMode ?? "-"}</li>
