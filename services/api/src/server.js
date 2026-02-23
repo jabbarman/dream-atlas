@@ -13,8 +13,80 @@ const atlasStore = new SQLiteAtlasStore({
   dbPath: process.env.ATLAS_DB_PATH || defaultDbPath,
 });
 
+function toInt(value, fallback) {
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
 function toMs(value) {
   return Number(value.toFixed(3));
+}
+
+function normalizeImportedSnapshot(source) {
+  const snapshot =
+    source && typeof source === "object" && !Array.isArray(source) && source.snapshot
+      ? source.snapshot
+      : source;
+
+  if (!snapshot || typeof snapshot !== "object" || Array.isArray(snapshot)) {
+    return {
+      ok: false,
+      errors: [{ field: "snapshot", message: "snapshot must be an object" }],
+    };
+  }
+
+  const errors = [];
+  if (!Array.isArray(snapshot.fragments) || snapshot.fragments.length === 0) {
+    errors.push({
+      field: "fragments",
+      message: "fragments must be a non-empty array",
+    });
+  }
+  if (!Array.isArray(snapshot.clusters) || snapshot.clusters.length === 0) {
+    errors.push({
+      field: "clusters",
+      message: "clusters must be a non-empty array",
+    });
+  }
+  if (!Array.isArray(snapshot.nodes) || snapshot.nodes.length === 0) {
+    errors.push({
+      field: "nodes",
+      message: "nodes must be a non-empty array",
+    });
+  }
+
+  if (errors.length > 0) {
+    return { ok: false, errors };
+  }
+
+  const uiState =
+    snapshot.uiState && typeof snapshot.uiState === "object" && !Array.isArray(snapshot.uiState)
+      ? snapshot.uiState
+      : {};
+  const id =
+    typeof snapshot.id === "string" && snapshot.id.trim().length > 0
+      ? snapshot.id.trim()
+      : `atlas-import-${Date.now().toString(36)}`;
+
+  return {
+    ok: true,
+    value: {
+      ...snapshot,
+      id,
+      schemaVersion: toInt(snapshot.schemaVersion, 1),
+      nodeCount: toInt(snapshot.nodeCount, snapshot.nodes.length),
+      uiState: {
+        selectedNodeId:
+          typeof uiState.selectedNodeId === "string" && uiState.selectedNodeId.trim().length > 0
+            ? uiState.selectedNodeId
+            : null,
+        zoom: Number.isFinite(uiState.zoom) ? uiState.zoom : 1,
+        panX: Number.isFinite(uiState.panX) ? uiState.panX : 0,
+        panY: Number.isFinite(uiState.panY) ? uiState.panY : 0,
+      },
+      savedAt: new Date().toISOString(),
+    },
+  };
 }
 
 app.use(cors());
@@ -101,6 +173,29 @@ app.post("/atlas/:id/load", (req, res) => {
       ...snapshot.perf,
       loadMs: toMs(performance.now() - loadStart),
     },
+  });
+});
+
+app.post("/atlas/import", (req, res) => {
+  const importStart = performance.now();
+  const validation = normalizeImportedSnapshot(req.body);
+  if (!validation.ok) {
+    res.status(400).json({
+      error: "Validation failed",
+      details: validation.errors,
+    });
+    return;
+  }
+
+  const persisted = atlasStore.upsert(validation.value, { markSaved: true });
+  res.json({
+    ok: true,
+    id: persisted.id,
+    schemaVersion: persisted.schemaVersion,
+    perf: {
+      importMs: toMs(performance.now() - importStart),
+    },
+    snapshot: persisted,
   });
 });
 

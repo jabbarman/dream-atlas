@@ -72,6 +72,20 @@ function formatApiError(payload, fallbackMessage) {
   return `${base}: ${detailText}`;
 }
 
+function downloadJsonFile(fileName, payload) {
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: "application/json",
+  });
+  const objectUrl = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = objectUrl;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(objectUrl);
+}
+
 function getIntensityColor(intensity) {
   const palette = {
     1: 0x69d2e7,
@@ -128,6 +142,7 @@ function computeAtlasBounds(atlas) {
 
 export default function App() {
   const canvasRef = useRef(null);
+  const atlasImportInputRef = useRef(null);
   const appRef = useRef(null);
   const worldRef = useRef(null);
   const wheelHandlerRef = useRef(null);
@@ -144,6 +159,7 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoadingAtlas, setIsLoadingAtlas] = useState(false);
+  const [isImportingAtlas, setIsImportingAtlas] = useState(false);
   const [isRefreshingAtlasList, setIsRefreshingAtlasList] = useState(false);
   const [error, setError] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
@@ -526,13 +542,7 @@ export default function App() {
     setStatusMessage("");
 
     try {
-      const payload = {
-        ...atlas,
-        uiState: {
-          selectedNodeId,
-          ...getCameraState(),
-        },
-      };
+      const payload = buildPersistableSnapshot(atlas);
 
       const response = await fetch(`${API_BASE_URL}/atlas/${atlas.id}/save`, {
         method: "POST",
@@ -553,6 +563,17 @@ export default function App() {
     } finally {
       setIsSaving(false);
     }
+  }
+
+  function buildPersistableSnapshot(sourceAtlas) {
+    if (!sourceAtlas) return null;
+    return {
+      ...sourceAtlas,
+      uiState: {
+        selectedNodeId,
+        ...getCameraState(),
+      },
+    };
   }
 
   async function loadSnapshot() {
@@ -591,6 +612,64 @@ export default function App() {
     }
   }
 
+  function exportAtlasSnapshot() {
+    if (!atlas) {
+      setError("Generate or load an atlas before exporting atlas JSON.");
+      return;
+    }
+
+    const exportPayload = buildPersistableSnapshot(atlas);
+    const fileSafeId = (atlas.id ?? "atlas").replace(/[^a-z0-9-]/gi, "_");
+    const fileName = `atlas-snapshot-${fileSafeId}-${Date.now()}.json`;
+    downloadJsonFile(fileName, exportPayload);
+
+    setError("");
+    setStatusMessage(`Atlas JSON exported: ${fileName}`);
+  }
+
+  function triggerAtlasImportPicker() {
+    atlasImportInputRef.current?.click();
+  }
+
+  async function importAtlasFromFile(event) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) return;
+
+    setIsImportingAtlas(true);
+    setError("");
+    setStatusMessage("");
+
+    try {
+      const rawText = await file.text();
+      const parsed = JSON.parse(rawText);
+      const response = await fetch(`${API_BASE_URL}/atlas/import`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed),
+      });
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(formatApiError(payload, "Failed to import atlas snapshot"));
+      }
+
+      const importedAtlas = payload.snapshot;
+      setAtlas(importedAtlas);
+      setSeed(importedAtlas.seed ?? seed);
+      setClusterMode(importedAtlas.clusterMode ?? clusterMode);
+      setSelectedNodeId(importedAtlas.uiState?.selectedNodeId ?? null);
+      setSnapshotIdInput(importedAtlas.id ?? "");
+      setStatusMessage(`Atlas JSON imported: ${importedAtlas.id}`);
+      requestAnimationFrame(() => applyCameraState(importedAtlas.uiState, importedAtlas));
+      refreshAtlasList({ preferredSnapshotId: importedAtlas.id, silent: true });
+    } catch (importError) {
+      setError(importError.message || "Failed to import atlas JSON.");
+    } finally {
+      setIsImportingAtlas(false);
+    }
+  }
+
   function exportPerfSnapshot() {
     if (!atlas) {
       setError("Generate or load an atlas before exporting telemetry.");
@@ -618,17 +697,7 @@ export default function App() {
 
     const fileSafeId = (atlas.id ?? "atlas").replace(/[^a-z0-9-]/gi, "_");
     const fileName = `perf-snapshot-${fileSafeId}-${Date.now()}.json`;
-    const blob = new Blob([JSON.stringify(exportPayload, null, 2)], {
-      type: "application/json",
-    });
-    const objectUrl = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = objectUrl;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(objectUrl);
+    downloadJsonFile(fileName, exportPayload);
 
     setError("");
     setStatusMessage(`Telemetry exported: ${fileName}`);
@@ -873,6 +942,10 @@ export default function App() {
         exportPerfSnapshot();
         return true;
       },
+      exportAtlasSnapshot: () => {
+        exportAtlasSnapshot();
+        return true;
+      },
     };
 
     return () => {
@@ -888,6 +961,13 @@ export default function App() {
       </header>
 
       <section className="controls">
+        <input
+          ref={atlasImportInputRef}
+          type="file"
+          accept="application/json,.json"
+          className="file-input-hidden"
+          onChange={importAtlasFromFile}
+        />
         <label htmlFor="seed-input">
           Seed
           <input
@@ -964,6 +1044,22 @@ export default function App() {
           disabled={!atlas}
         >
           Fit View
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={triggerAtlasImportPicker}
+          disabled={isImportingAtlas}
+        >
+          {isImportingAtlas ? "Importing..." : "Import Atlas JSON"}
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={exportAtlasSnapshot}
+          disabled={!atlas}
+        >
+          Export Atlas JSON
         </button>
         <button
           type="button"
