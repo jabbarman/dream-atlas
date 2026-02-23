@@ -2,6 +2,7 @@
 
 ## Purpose
 Define a Codex-native delivery loop that keeps role-quality outputs while using one primary implementation thread.
+Canonical operating method: `docs/ops/CODEX-DELIVERY-METHOD.md`.
 
 ## Operating Model
 - One primary Codex CLI session acts as the integrator for code, tests, and docs.

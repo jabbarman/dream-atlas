@@ -45,3 +45,4 @@ When adding tests, colocate with source as `*.test.jsx` or `*.test.js` and add s
 - Treat repository docs as source of truth for decisions and execution state.
 - OpenClaw-era token/WhatsApp coordination controls are retired; use repo artifacts, issues, and PRs for coordination.
 - Before major implementation choices, capture rationale in an ADR (`docs/templates/ADR.md`).
+- Follow `docs/ops/CODEX-DELIVERY-METHOD.md` as the default execution method (phase gates, evidence capture, state tracking, and separated code/docs commits).
