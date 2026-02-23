@@ -1,0 +1,5 @@
+{
+  "capturedAt": "2026-02-23T22:43:23Z",
+  "status": 400,
+  "body": {"error":"Validation failed","details":[{"field":"fragments","message":"fragments must be a non-empty array"},{"field":"clusters","message":"clusters must be a non-empty array"},{"field":"nodes","message":"nodes must be a non-empty array"}]}
+}

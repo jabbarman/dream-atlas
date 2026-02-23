@@ -31,8 +31,16 @@ Owner: Tech Lead
 - Slice 3 QA evidence pass completed:
   - report: `docs/03-mvp/07-SLICE-3-QA-REPORT.md`
   - evidence: discovery UI screenshot
+- Slice 4 export/release-readiness implemented in commit `6d375c3`:
+  - portable atlas JSON export from UI
+  - atlas JSON import endpoint (`POST /atlas/import`) + UI file-picker import flow
+  - roundtrip-safe persistence payload reuse between save/export
+- Slice 4 QA + release artifacts completed:
+  - regression matrix: `docs/03-mvp/08-MVP-REGRESSION-MATRIX.md`
+  - report: `docs/03-mvp/09-SLICE-4-QA-REPORT.md`
+  - checklist: `docs/03-mvp/10-MVP-RELEASE-CHECKLIST.md`
 - Next focus:
-  - start Slice 4 export and release-readiness package
+  - complete MVP-12 privacy/non-clinical copy pass for final release sign-off
 
 ## Execution slices
 

@@ -131,3 +131,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: `npm run build:web`; DevTools snapshot and screenshot capture confirming Slice 3 discovery controls are present in the running UI.
 - Outcome: Slice 3 is marked PASS with evidence; next stage is Slice 4 export + release-readiness.
+
+### Stage: MVP Slice 4 export/release-readiness implementation + QA
+- Date (UTC): 2026-02-23T22:44:45Z
+- Integrator role: implemented portable atlas JSON export in UI, added atlas JSON import (API endpoint + UI file picker), executed roundtrip integrity validation, and assembled regression matrix plus release checklist artifacts.
+- Delegated agent role: none (single-session implementation).
+- Validation: `npm run build:web`; API roundtrip evidence (`mvp-slice4-export-import-roundtrip.json`); API malformed-import validation (`mvp-slice4-import-validation.json`); DevTools UI evidence screenshot.
+- Outcome: Slice 4 is marked PASS with release-readiness packet complete; next stage is MVP-12 copy/privacy pass for final sign-off.

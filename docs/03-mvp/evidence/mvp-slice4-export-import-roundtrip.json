@@ -1,0 +1,14 @@
+{
+  "capturedAt": "2026-02-23T22:43:16.081Z",
+  "apiBaseUrl": "http://localhost:8790",
+  "generatedId": "atlas-ac6d8d15",
+  "importedId": "atlas-ac6d8d15-portable",
+  "checks": {
+    "nodeCountMatch": true,
+    "clusterCountMatch": true,
+    "fragmentCountMatch": true,
+    "signatureMatch": true,
+    "uiStatePreserved": true
+  },
+  "pass": true
+}

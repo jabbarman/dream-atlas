@@ -18,10 +18,12 @@ Source: Discovery opportunities + completed POC evidence
   - MVP-07 (Filters by intensity/time bucket)
   - MVP-08 (Related-node highlighting)
   - MVP Slice 3 QA evidence pass (`docs/03-mvp/07-SLICE-3-QA-REPORT.md`)
-- Next in sequence:
   - MVP-09 (Atlas JSON export)
   - MVP-10 (MVP QA matrix + regression suite)
   - MVP-11 (Release checklist + rollback notes)
+  - MVP Slice 4 QA evidence pass (`docs/03-mvp/09-SLICE-4-QA-REPORT.md`)
+- Next in sequence:
+  - MVP-12 (Privacy/non-clinical copy pass)
 
 | ID | Item | Priority | Owner | Depends on | Done when |
 |---|---|---|---|---|---|
@@ -43,4 +45,5 @@ Source: Discovery opportunities + completed POC evidence
 1. MVP-01, MVP-02, MVP-03
 2. MVP-04, MVP-05
 3. MVP-06, MVP-07, MVP-08 (complete)
-4. MVP-09, MVP-10, MVP-11, MVP-12
+4. MVP-09, MVP-10, MVP-11 (complete)
+5. MVP-12

@@ -1,7 +1,7 @@
 # MVP Scope Definition (Draft v1)
 
-Date (UTC): 2026-02-22  
-Phase: MVP-prep (parallel draft while POC gate approval is pending)  
+Date (UTC): 2026-02-23  
+Phase: MVP  
 Owner: PM + Tech Lead
 
 ## MVP objective
@@ -42,4 +42,4 @@ Ship the smallest valuable Dream Atlas release that supports real user input, re
 
 ## Gate dependency
 
-This scope is execution-ready but should be treated as pre-approved draft until POC gate sign-off is formally recorded in `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`.
+POC gate dependency is resolved. Sign-off is recorded in `docs/02-poc/15-SPIKE-1-SIGNOFF-RECORD.md`, and MVP execution is active.
