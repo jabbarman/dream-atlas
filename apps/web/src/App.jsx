@@ -957,8 +957,19 @@ export default function App() {
     <div className="page">
       <header>
         <h1>Dream Atlas — POC Scaffold</h1>
-        <p>First end-to-end flow: sample fragments to seeded generation to interactive atlas.</p>
+        <p>Creative memory-mapping workflow: input fragments, generate, explore, and save/export.</p>
       </header>
+
+      <section className="boundary-note">
+        <p>
+          Dream Atlas is a creative exploration tool. It does not provide therapy, diagnosis, or medical
+          advice.
+        </p>
+        <p>
+          Privacy note: atlas data is stored in the configured backend store. Use only environments you
+          control and avoid sharing confidential personal information.
+        </p>
+      </section>
 
       <section className="controls">
         <input

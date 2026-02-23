@@ -39,8 +39,11 @@ Owner: Tech Lead
   - regression matrix: `docs/03-mvp/08-MVP-REGRESSION-MATRIX.md`
   - report: `docs/03-mvp/09-SLICE-4-QA-REPORT.md`
   - checklist: `docs/03-mvp/10-MVP-RELEASE-CHECKLIST.md`
+- MVP-12 copy/privacy pass completed:
+  - report: `docs/03-mvp/11-MVP-COPY-PRIVACY-PASS.md`
+  - UI + README copy aligned to non-clinical/privacy boundaries
 - Next focus:
-  - complete MVP-12 privacy/non-clinical copy pass for final release sign-off
+  - collect final release sign-off confirmation
 
 ## Execution slices
 

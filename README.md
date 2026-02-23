@@ -11,6 +11,13 @@ Dream Atlas is a procedural memory map: it turns short text fragments (dreams, m
 
 This project is a creative and exploratory tool. It is not a clinical or diagnostic product.
 
+## Privacy and non-clinical boundaries
+
+- Dream Atlas is for reflective/creative exploration, not treatment, diagnosis, or crisis support.
+- Fragment and atlas data are stored in the backend configured for your runtime environment.
+- For local development, data remains on your machine unless you deploy the API elsewhere.
+- Use environments you control and avoid uploading highly sensitive personal information.
+
 ## Current POC capabilities
 
 - Generate an atlas from a 50-fragment representative sample set.
@@ -19,6 +26,8 @@ This project is a creative and exploratory tool. It is not a clinical or diagnos
 - PixiJS map rendering with pan/zoom/select interaction.
 - API + UI snapshot persistence flow with saved-atlas picker, generate/save/load, and telemetry export.
 - MVP Slice 2 ingestion flow: manual fragment entry and JSON paste/import for custom generation.
+- MVP Slice 3 discovery flow: text/tag search, intensity/time filters, and related-node highlighting.
+- MVP Slice 4 portability flow: atlas JSON export/import roundtrip.
 
 ## Architecture (current)
 
@@ -46,6 +55,7 @@ npm run dev
 - `GET /atlas/:id` - retrieve a stored snapshot by id
 - `POST /atlas/:id/save` - save snapshot
 - `POST /atlas/:id/load` - load snapshot
+- `POST /atlas/import` - import atlas JSON snapshot payload
 
 ## Product and delivery docs
 
@@ -60,3 +70,7 @@ For implementation status and project governance:
 7. `docs/03-mvp/02-MVP-IMPLEMENTATION-PLAN.md`
 8. `docs/03-mvp/05-SLICE-1-QA-REPORT.md`
 9. `docs/03-mvp/06-SLICE-2-QA-REPORT.md`
+10. `docs/03-mvp/07-SLICE-3-QA-REPORT.md`
+11. `docs/03-mvp/08-MVP-REGRESSION-MATRIX.md`
+12. `docs/03-mvp/09-SLICE-4-QA-REPORT.md`
+13. `docs/03-mvp/10-MVP-RELEASE-CHECKLIST.md`

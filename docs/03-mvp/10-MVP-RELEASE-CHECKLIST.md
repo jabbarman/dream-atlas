@@ -15,6 +15,7 @@ Owner: PM + Tech Lead + QA
 - [x] UI evidence for export/import controls captured (`docs/03-mvp/evidence/mvp-slice4-export-controls-ui.png`)
 - [x] Frontend production build passes (`npm run build:web`)
 - [x] No open critical defects in current MVP scope
+- [x] MVP-12 privacy/non-clinical copy pass complete (`docs/03-mvp/11-MVP-COPY-PRIVACY-PASS.md`)
 
 ## Rollback notes
 
@@ -26,9 +27,9 @@ If Slice 4 changes need rollback:
 
 ## Known issues
 
-1. MVP-12 privacy/non-clinical copy pass remains open (non-blocking for technical readiness, blocking for final release sign-off).
+1. No blocking technical issues currently recorded in MVP scope.
 
 ## Current decision
 
 Technical readiness: **GO**  
-Release sign-off readiness: **CONDITIONAL GO** pending MVP-12 copy pass completion.
+Release sign-off readiness: **GO** (awaiting final approver confirmation).

@@ -22,8 +22,10 @@ Source: Discovery opportunities + completed POC evidence
   - MVP-10 (MVP QA matrix + regression suite)
   - MVP-11 (Release checklist + rollback notes)
   - MVP Slice 4 QA evidence pass (`docs/03-mvp/09-SLICE-4-QA-REPORT.md`)
-- Next in sequence:
   - MVP-12 (Privacy/non-clinical copy pass)
+  - MVP-12 closure report (`docs/03-mvp/11-MVP-COPY-PRIVACY-PASS.md`)
+- Next in sequence:
+  - Final release sign-off confirmation
 
 | ID | Item | Priority | Owner | Depends on | Done when |
 |---|---|---|---|---|---|
@@ -46,4 +48,5 @@ Source: Discovery opportunities + completed POC evidence
 2. MVP-04, MVP-05
 3. MVP-06, MVP-07, MVP-08 (complete)
 4. MVP-09, MVP-10, MVP-11 (complete)
-5. MVP-12
+5. MVP-12 (complete)
+6. Final release sign-off confirmation

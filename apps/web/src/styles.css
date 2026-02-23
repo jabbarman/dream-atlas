@@ -23,6 +23,24 @@ p {
   color: #b4c8ea;
 }
 
+.boundary-note {
+  border: 1px solid #304261;
+  border-radius: 10px;
+  background: #0c152b;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.boundary-note p {
+  margin: 0 0 6px;
+  color: #d2e1fb;
+  font-size: 0.86rem;
+}
+
+.boundary-note p:last-child {
+  margin-bottom: 0;
+}
+
 .controls {
   display: flex;
   flex-wrap: wrap;
