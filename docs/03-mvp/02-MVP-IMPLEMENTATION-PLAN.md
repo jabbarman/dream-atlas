@@ -1,10 +1,10 @@
 # MVP Implementation Plan (Draft v1)
 
-Date (UTC): 2026-02-22  
+Date (UTC): 2026-02-23  
 Phase: MVP  
 Owner: Tech Lead
 
-## Current execution update (2026-02-22)
+## Current execution update (2026-02-23)
 
 - Slice 1 API foundation implemented in commit `2f1eb57`:
   - durable SQLite snapshot store
@@ -23,8 +23,16 @@ Owner: Tech Lead
 - Slice 2 QA evidence pass completed:
   - report: `docs/03-mvp/06-SLICE-2-QA-REPORT.md`
   - evidence: ingestion UI screenshot
+- Slice 3 discovery utility implemented in commit `a11fece`:
+  - text/tag search for visible node narrowing
+  - intensity + time-bucket filters
+  - related-node highlighting from selected context
+  - visible-node and visible-cluster counts in map/summary surfaces
+- Slice 3 QA evidence pass completed:
+  - report: `docs/03-mvp/07-SLICE-3-QA-REPORT.md`
+  - evidence: discovery UI screenshot
 - Next focus:
-  - start Slice 3 discovery utility
+  - start Slice 4 export and release-readiness package
 
 ## Execution slices
 

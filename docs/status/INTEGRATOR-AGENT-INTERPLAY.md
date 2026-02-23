@@ -124,3 +124,10 @@ Purpose: keep a simple, cumulative record of how the primary Codex CLI integrato
 - Delegated agent role: none (single-session implementation).
 - Validation: `npm run build:web`; browser walkthrough proving manual-add -> custom-generate flow and invalid JSON error messaging.
 - Outcome: Slice 2 is marked PASS with committed evidence; next stage is Slice 3 discovery utilities (search/filter/related-node highlighting).
+
+### Stage: MVP Slice 3 discovery utility implementation + QA
+- Date (UTC): 2026-02-23T22:28:26Z
+- Integrator role: implemented search and intensity/time-bucket filters, related-node highlighting from selected context, and visible-count summaries in both map labels and sidebar summaries.
+- Delegated agent role: none (single-session implementation).
+- Validation: `npm run build:web`; DevTools snapshot and screenshot capture confirming Slice 3 discovery controls are present in the running UI.
+- Outcome: Slice 3 is marked PASS with evidence; next stage is Slice 4 export + release-readiness.

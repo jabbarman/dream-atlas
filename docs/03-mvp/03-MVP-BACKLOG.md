@@ -1,10 +1,10 @@
 # MVP Backlog (Draft v1)
 
-Date (UTC): 2026-02-22  
+Date (UTC): 2026-02-23  
 Phase: MVP  
 Source: Discovery opportunities + completed POC evidence
 
-## Execution update (2026-02-22)
+## Execution update (2026-02-23)
 
 - Completed:
   - MVP-01 (API durability via SQLite storage)
@@ -14,10 +14,14 @@ Source: Discovery opportunities + completed POC evidence
   - MVP-04 (Manual fragment entry form)
   - MVP-05 (JSON paste/import flow)
   - MVP Slice 2 QA evidence pass (`docs/03-mvp/06-SLICE-2-QA-REPORT.md`)
-- Next in sequence:
   - MVP-06 (Search by text/tag)
   - MVP-07 (Filters by intensity/time bucket)
   - MVP-08 (Related-node highlighting)
+  - MVP Slice 3 QA evidence pass (`docs/03-mvp/07-SLICE-3-QA-REPORT.md`)
+- Next in sequence:
+  - MVP-09 (Atlas JSON export)
+  - MVP-10 (MVP QA matrix + regression suite)
+  - MVP-11 (Release checklist + rollback notes)
 
 | ID | Item | Priority | Owner | Depends on | Done when |
 |---|---|---|---|---|---|
@@ -38,5 +42,5 @@ Source: Discovery opportunities + completed POC evidence
 
 1. MVP-01, MVP-02, MVP-03
 2. MVP-04, MVP-05
-3. MVP-06, MVP-07, MVP-08
+3. MVP-06, MVP-07, MVP-08 (complete)
 4. MVP-09, MVP-10, MVP-11, MVP-12
